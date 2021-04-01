@@ -28,5 +28,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn run build
-    - run: yarn test -- --coverage
+    - name: Install app dependencies
+      run: yarn install
+    - name: Build the app
+      run: yarn build
+    - name: Run tests with coverage
+      run: yarn test -- --coverage
