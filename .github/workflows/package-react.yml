@@ -7,6 +7,10 @@ on:
     branches: [ $default-branch ]
   pull_request:
 
+defaults:
+  run:
+    working-directory: ./ui
+
 jobs:
 
   build-react:
