@@ -3,9 +3,24 @@ version: "3.9"
 services:
   ui:
     build: ./ui
+    restart: always
     ports:
       - 80:80
     depends_on:
-      - api
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -s http://localhost/ || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
   api:
     build: ./api
+    restart: always
+    healthcheck:
+      # slightly confusing, but the container name is the hostname
+      # so we have api twice
+      test: curl --fail -s http://api/api/time || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
