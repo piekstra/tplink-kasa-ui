@@ -7,6 +7,9 @@ on:
     branches: [ $default-branch ]
   pull_request:
 
+defaults:
+  run:
+    working-directory: ./api
 jobs:
   build-python:
 
@@ -23,7 +26,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     # Start this early in case it needs some "boot up time"
     - name: Build and run docker container for tests
-      working-directory: /api
       run: |
         docker build . -t apiserver
         docker run -d -p 80:80 apiserver
