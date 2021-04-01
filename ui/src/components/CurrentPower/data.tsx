@@ -1,4 +1,4 @@
-export default [
+const stream_data = [
     {
       "Raoul": 136,
       "Josiane": 13,
@@ -128,3 +128,5 @@ export default [
       "Jacques": 10
     },
 ]
+
+export default stream_data
