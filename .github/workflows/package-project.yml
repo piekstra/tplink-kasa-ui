@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  build-python:
+  build-project:
 
     runs-on: ubuntu-latest
 
@@ -18,7 +18,7 @@ jobs:
     # Start this early in case it needs some "boot up time"
     - name: Start docker containers for tests
       run: |
-        docker-compose up -d react-flask-app
+        docker-compose up -d
 
     - name: Run integration tests
       run: newman run tests/dockerized-project.postman_collection.json
