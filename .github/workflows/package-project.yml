@@ -1,0 +1,24 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+name: Package
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+
+jobs:
+  build-python:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Start this early in case it needs some "boot up time"
+    - name: Start docker containers for tests
+      run: |
+        docker-compose up -d react-flask-app
+
+    - name: Run integration tests
+      run: newman run tests/dockerized-project.postman_collection.json

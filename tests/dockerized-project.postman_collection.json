@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "1873f1dd-bb73-4ef3-be2a-7128960a6eec",
+		"name": "dockerized-project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Main page exists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Load the HTML response to $",
+							"const $ = cheerio.load(pm.response.text());",
+							"",
+							"// Use the jQuery selector API to get different elements on the page",
+							"pm.test(\"Title is present on page\", function () {",
+							"    pm.expect($('title').text());",
+							"});",
+							"",
+							"pm.test(\"Body with root div is present on page\", function () {",
+							"    pm.expect($('body.div[id=root]'));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					]
+				},
+				"description": "Tests that the main page (root of the site) exists"
+			},
+			"response": []
+		}
+	]
+}
