@@ -1,11 +1,12 @@
-const stream_data = [
+const stream_data: Array<{ [key: string]: number; }> = [
     {
       "Raoul": 136,
       "Josiane": 13,
       "Marcel": 82,
       "René": 185,
       "Paul": 89,
-      "Jacques": 36
+      "Jacques": 36,
+      "Jacquessssssssssssssš": 199
     },
     {
       "Raoul": 116,
@@ -13,7 +14,8 @@ const stream_data = [
       "Marcel": 138,
       "René": 149,
       "Paul": 54,
-      "Jacques": 199
+      "Jacques": 36,
+      "Jacquessssssssssssssš": 199
     },
     {
       "Raoul": 42,
@@ -21,7 +23,8 @@ const stream_data = [
       "Marcel": 191,
       "René": 187,
       "Paul": 127,
-      "Jacques": 135
+      "Jacques": 135,
+      "Jacquessssssssssssssš": 0
     },
     {
       "Raoul": 91,
@@ -125,7 +128,8 @@ const stream_data = [
       "Marcel": 154,
       "René": 109,
       "Paul": 103,
-      "Jacques": 10
+      "Jacques": 10,
+      "Jacquessssssssssssssš": 199
     },
 ]
 

@@ -10,12 +10,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     paper: {
-      height: 400,
-      width: 400,
+      height: 300,
+      width: 450,
       elevation: 3,
     },
     control: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
     },
   }),
 );
@@ -25,7 +25,7 @@ export default function Dashboard() {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.root} spacing={1}>
+    <Grid container className={classes.root} spacing={1} >
       <Grid item xs={12}>
         <Grid container justify="center" spacing={spacing}>
           {[0, 1, 2, 3, 4, 5].map((value) => (
