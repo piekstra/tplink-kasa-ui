@@ -7,8 +7,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      api:
-        condition: service_healthy
+      - api
     healthcheck:
       test: curl --fail -s http://localhost/ || exit 1
       interval: 5s

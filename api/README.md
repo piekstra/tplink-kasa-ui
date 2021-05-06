@@ -5,3 +5,7 @@ Note that the [`app/main.py`](app/main.py) file must maintain that filename so t
 ## Environment
 
 You will need to setup environment variables with proper values in a `.env` file. There is a [`.env.example`](app/.env.example) provided as an example of what variables to specify.
+
+## Running
+
+From the [app](app) folder, you can simply run `uvicorn main:app --reload` to serve the API in development mode.

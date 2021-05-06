@@ -1,6 +1,5 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.8
+FROM tiangolo/uvicorn-gunicorn:python3.8
 
-COPY ./app/requirements.txt /tmp/
-RUN pip install -U pip
-RUN pip install -r /tmp/requirements.txt
 COPY ./app /app
+RUN pip install -U pip
+RUN pip install -r /app/requirements.txt

@@ -15,6 +15,11 @@ function App() {
     <div className="App">
       <DashboardDrawer />
       <p className="ServerTime">The current time is {currentTime}.</p>
+      <p className="AmCharts">
+        <a href="https://www.amcharts.com/docs/v4/" target="_blank" rel="noreferrer">
+          Charts are provided by amCharts 4
+        </a>
+      </p>
     </div>
   );
 }
