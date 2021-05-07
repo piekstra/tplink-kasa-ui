@@ -8,45 +8,62 @@ am4core.useTheme(am4themes_animated);
 // obvious on the page
 am4core.addLicense("ch-custom-attribution");
 
+// TODO: series opacity to fully opaque
+// TODO: series line at top of each area to no special border / width
+// TODO: grid line density along x axis
 export default class AmChartsXYChartBuilder {
     chart: am4charts.XYChart;
 
     constructor(chartElementName: string) {
         this.chart = am4core.create(chartElementName, am4charts.XYChart)
         this.chart.paddingRight = 20;
-        
-        // Add a date-based X axis
-        let dateAxis = this.chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.grid.template.location = 0;
-    
-        // Setup a Y axis based on values
+        this.chart.paddingLeft = 0;
+
+        this.addXAxis();    
+        this.addYAxis();
+        this.addLegend();
+    }
+
+    private addYAxis() {
         let valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
         if (valueAxis.tooltip) {
             valueAxis.tooltip.disabled = true;
         }
-        valueAxis.renderer.minWidth = 35;
+        valueAxis.renderer.minGridDistance = 20;
+    }
 
-        // Add a cursor
+    private addXAxis() {
+        // date-based X axis
+        let dateAxis = this.chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.grid.template.location = 0;
+        dateAxis.renderer.ticks.template.disabled = true;
+        dateAxis.renderer.minGridDistance = 50;
+        dateAxis.dateFormatter = new am4core.DateFormatter();
+        dateAxis.dateFormats.setKey("day", "MM-dd")
+        dateAxis.periodChangeDateFormats.setKey("day", "MM-dd");
+
+        // Add a for the dateAxis cursor
         this.chart.cursor = new am4charts.XYCursor();
         this.chart.cursor.xAxis = dateAxis;
-        this.chart.paddingLeft = 0;
+    }
 
-        // Add a legend and customize it
-        this.chart.legend = new am4charts.Legend();
-        this.chart.legend.useDefaultMarker = true;
-        this.chart.legend.fontSize = 12;
-        this.chart.legend.maxHeight = 40;
-        this.chart.legend.scrollable = true;
-        this.chart.legend.itemContainers.template.paddingTop = 2;
-        this.chart.legend.itemContainers.template.paddingBottom = 2;
-        this.chart.legend.labels.template.paddingTop = 3;
-        this.chart.legend.markers.template.valign = "middle";
-        this.chart.legend.markers.template.width = 8;
-        this.chart.legend.markers.template.height = 8;
-        let marker: any = this.chart.legend.markers.template.children.getIndex(0);
+    private addLegend() {
+        let legend = new am4charts.Legend();
+        legend.useDefaultMarker = true;
+        legend.fontSize = 12;
+        legend.maxHeight = 40;
+        legend.scrollable = true;
+        legend.itemContainers.template.paddingTop = 2;
+        legend.itemContainers.template.paddingBottom = 2;
+        legend.labels.template.paddingTop = 3;
+        legend.markers.template.valign = "middle";
+        legend.markers.template.width = 8;
+        legend.markers.template.height = 8;
+        let marker: any = legend.markers.template.children.getIndex(0);
         if (marker) {
             marker.cornerRadius(4, 4, 4, 4);
         }
+        this.chart.legend = legend;
     }
 
     addTitle(title: string) {
@@ -58,8 +75,20 @@ export default class AmChartsXYChartBuilder {
         chartTitle.paddingLeft = 10;
     }
 
-    buildChartSeries(data: any, xKey: string) {
-        Object.keys(data).forEach((dataKey: string) => {
+    setFirstDataPoint(data: any, xKey: string) {
+        this.chart.data = [data];
+        this.buildChartSeries(data, xKey);
+    }
+
+    setDataPoints(data: Array<any>, xKey: string, dataKeys: Array<string>) {
+        this.chart.data = data;
+        this.buildChartSeries(data, xKey, dataKeys);
+    }
+
+    private buildChartSeries(data: any, xKey: string, keys?: Array<string>) {
+        // Keys will be extracted from the data if not specified
+        let dataKeys = keys || Object.keys(data);
+        dataKeys.forEach((dataKey: string) => {
             if (dataKey === xKey) return;
             let series = this.chart.series.push(new am4charts.LineSeries());
             series.dataFields.dateX = xKey;
@@ -76,10 +105,5 @@ export default class AmChartsXYChartBuilder {
             series.strokeWidth = 2;
             series.stacked = true;
         })
-    }
-
-    setInitialData(data: any, xKey: string) {
-        this.chart.data = [data];
-        this.buildChartSeries(data, xKey);
     }
 }

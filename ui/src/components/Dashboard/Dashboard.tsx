@@ -8,7 +8,8 @@ import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
-import { CurrentPower } from '../'
+import CurrentPower from '../CurrentPower/CurrentPower'
+import DayPower from '../DayPower/DayPower'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -83,11 +84,15 @@ export default function Dashboard() {
       </Grid>
       <Grid item xs={12} sm={10} md={6} lg={6}>
         <Paper className={classes.paper3}>
+          <DayPower deviceAlias="Miner" />
+        </Paper>
+      </Grid>
+      <Grid item xs={12} sm={10} md={6} lg={6}>
+        <Paper className={classes.paper3}>
           <CurrentPower 
             autoRefresh={autoRefresh} 
             refreshInterval={parseInt(refreshInterval)*1000} 
             deviceAlias="Miner" 
-            maxDataPoints={10}
           />
         </Paper>
       </Grid>

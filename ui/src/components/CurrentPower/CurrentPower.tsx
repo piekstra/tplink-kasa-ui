@@ -11,7 +11,9 @@ interface Props {
     maxDataPoints?: number,
 }
 
-const DEFAULT_MAX_DATA_POINTS = 10;
+// Number of minutes in a day
+const DEFAULT_MAX_DATA_POINTS = 1440;
+const CHART_TITLE = "Current Device Power";
 
 export default function CurrentPower(props: Props) {
     const chartStateHolder = useRef<any>(null);
@@ -34,9 +36,9 @@ export default function CurrentPower(props: Props) {
 
     useEffect(() => {    
         DevicePowerManager.fetchCurrentPowerData(props.deviceAlias, (initialPowerData) => {
-            let chartBuilder = new AmChartsXYChartBuilder("chartdiv");
-            chartBuilder.setInitialData(initialPowerData, "timestamp");
-            chartBuilder.addTitle("Current Device Power");
+            let chartBuilder = new AmChartsXYChartBuilder("currentpowerchartdiv");
+            chartBuilder.addTitle(CHART_TITLE);
+            chartBuilder.setFirstDataPoint(initialPowerData, "date");
         
             chartStateHolder.current = chartBuilder.chart;
         
@@ -47,7 +49,7 @@ export default function CurrentPower(props: Props) {
     }, [props.deviceAlias]);
 
     return (
-        <div className="chart" id="chartdiv">
+        <div className="chart" id="currentpowerchartdiv">
         </div>
     );
 }
