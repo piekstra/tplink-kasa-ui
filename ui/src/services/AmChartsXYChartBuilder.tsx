@@ -8,9 +8,8 @@ am4core.useTheme(am4themes_animated);
 // obvious on the page
 am4core.addLicense("ch-custom-attribution");
 
-// TODO: series opacity to fully opaque
-// TODO: series line at top of each area to no special border / width
-// TODO: grid line density along x axis
+// TODO merge tooltips into one view: https://www.amcharts.com/docs/v4/tutorials/multi-series-shared-tooltip-with-colored-bullets/
+// Set up a more contrasting, custom, color theme. Current theme is very rainbowy
 export default class AmChartsXYChartBuilder {
     chart: am4charts.XYChart;
 
@@ -101,8 +100,8 @@ export default class AmChartsXYChartBuilder {
                 series.tooltip.background.strokeWidth = 3;
                 series.tooltip.getFillFromObject = false;
             }
-            series.fillOpacity = 0.6;
-            series.strokeWidth = 2;
+            series.fillOpacity = 1.0;
+            // series.strokeWidth = 2;
             series.stacked = true;
         })
     }
