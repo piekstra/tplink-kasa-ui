@@ -9,3 +9,5 @@ You will need to setup environment variables with proper values in a `.env` file
 ## Running the API for Development
 
 From the [app](app) folder, you can simply run `uvicorn main:app --reload` to serve the API in development mode.
+
+The app's Swagger page will then be available at http://localhost:8000/docs

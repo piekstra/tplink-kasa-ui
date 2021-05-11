@@ -1,3 +1,3 @@
 ENV_VARS = {
-    'API_HOST': 'http://localhost:5000',
+    'API_HOST': 'http://localhost:8000',
 }
