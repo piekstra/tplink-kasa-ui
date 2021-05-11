@@ -1,11 +1,11 @@
 # API
 
-Note that the [`app/main.py`](app/main.py) file must maintain that filename so that it overrides the default `main.py` included in the `tiangolo/uwsgi-nginx-flask` docker image.
+This project uses your Kasa credentials to make queries to the TP-Link Cloud API
 
 ## Environment
 
-You will need to setup environment variables with proper values in a `.env` file. There is a [`.env.example`](app/.env.example) provided as an example of what variables to specify.
+You will need to setup environment variables with proper values in a `.env` file. There is a [`.env.example`](app/configuration/.env.example) provided as an example of what variables to specify.
 
-## Running
+## Running the API for Development
 
 From the [app](app) folder, you can simply run `uvicorn main:app --reload` to serve the API in development mode.

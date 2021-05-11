@@ -13,7 +13,7 @@ interface Props {
 
 // Number of minutes in a day
 const DEFAULT_MAX_DATA_POINTS = 1440;
-const CHART_TITLE = "Current Device Power";
+const CHART_TITLE = "Device Power Current Average kWh";
 
 export default function CurrentPower(props: Props) {
     const chartStateHolder = useRef<any>(null);

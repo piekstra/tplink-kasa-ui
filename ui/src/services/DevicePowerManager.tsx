@@ -73,4 +73,59 @@ export default class DevicePowerManager {
                 onDataReceive(values, keys);
             });
     }
+
+    static fetchMonthlyPowerData(deviceAlias: string, onDataReceive: (data: Array<DayPowerData>, keys: Array<string>) => void) {
+        // Simple GET request using fetch
+        console.log(`Getting month power data for devices like ${deviceAlias}`);
+        fetch(`/api/power/devices/month?named=${deviceAlias}`)
+            .then((response: any) => response.json())
+            .then((data: any) => {
+                console.log('GOT MONTH POWER DATA!');
+                console.log(data)
+                let powerData: {[key: number]: DayPowerData} = {};
+                let keys = Array<string>();
+                data.data.forEach((devicePower: any) => {
+                    keys.push(devicePower.name);
+                    devicePower.data.forEach((monthPower: any) => {
+                        // For creating a Date, month is 0-indexed (January is 0, February is 1, etc)
+                        // The data we receive is 1-indexed so we have to subtract 1
+                        let date = new Date(
+                            monthPower.year,
+                            monthPower.month - 1
+                        );                        
+                        // In order to get the current month's days, use the raw month value (1 month ahead)
+                        // with days set to 0 which gives us a date that is the last day 
+                        // of the previous month (the month we actually care about)
+                        let daysInMonth = new Date(
+                            monthPower.year,
+                            monthPower.month,
+                            0
+                        ).getDate();
+                        let timestamp = date.getTime();
+                        if (!(timestamp in powerData)) {
+                            powerData[timestamp] = {
+                                date: date
+                            }
+                        }
+                        powerData[timestamp][devicePower.name] = monthPower.energy_wh / 24 / daysInMonth;
+                    });
+                });
+
+                // Add 0-values
+                for (const timestamp in powerData) {
+                    keys.forEach(deviceName => {
+                        if (!(deviceName in powerData[timestamp])) {
+                            powerData[timestamp][deviceName] = 0;
+                        }
+                    })
+                }
+
+                // Because the data for the most-recent month (this month) 
+                // will almost always be partial, slice it off
+                let values = Object.values(powerData)
+                    .sort((a, b) => (a.date > b.date) ? 1 : -1)
+                    .slice(0, -1);
+                onDataReceive(values, keys);
+            });
+    }
 }

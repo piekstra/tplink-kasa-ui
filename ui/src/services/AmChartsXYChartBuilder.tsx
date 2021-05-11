@@ -9,7 +9,10 @@ am4core.useTheme(am4themes_animated);
 am4core.addLicense("ch-custom-attribution");
 
 // TODO merge tooltips into one view: https://www.amcharts.com/docs/v4/tutorials/multi-series-shared-tooltip-with-colored-bullets/
-// Set up a more contrasting, custom, color theme. Current theme is very rainbowy
+// TODO Set up a more contrasting, custom, color theme. Current theme is very rainbowy
+// TODO set "mock data" for charts so they render something while data is being loaded
+// TODO fix x-axis grid width (it gets squished on the current power data for certain date ranges)
+// TODO hide legend scrollbar when not needed (may just need slight height adjustments)
 export default class AmChartsXYChartBuilder {
     chart: am4charts.XYChart;
 

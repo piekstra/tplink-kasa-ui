@@ -8,6 +8,7 @@ from models import DevicesPowerCurrentResponse
 from models import DevicesPowerDayResponse
 from models import DevicesPowerMonthResponse
 
+# TODO support login / auth capability and account view to see current Kasa credentials or change them
 app = FastAPI()
 config = Configuration()
 tplink_service = TPLinkService(config.tplink_kasa)

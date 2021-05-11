@@ -1,25 +1,25 @@
 import { useEffect, useRef } from 'react'
 import DevicePowerManager from '../../services/DevicePowerManager'
 import AmChartsXYChartBuilder from '../../services/AmChartsXYChartBuilder'
-import './DayPower.css';
+import './MonthPower.css';
 
 interface Props {
     deviceAlias: string
 }
 
-const CHART_TITLE = "Device Power Daily Average kWh"
+const CHART_TITLE = "Device Power Monthly Average kWh"
 
-export default function DayPower(props: Props) {
+export default function MonthPower(props: Props) {
     const chartStateHolder = useRef<any>(null);
 
     useEffect(() => {    
-        DevicePowerManager.fetchDailyPowerData(props.deviceAlias, (dayPowerData, dataKeys) => {
-            console.log("GOT DAILY POWER DATA RESPONSE");
+        DevicePowerManager.fetchMonthlyPowerData(props.deviceAlias, (monthPowerData, dataKeys) => {
+            console.log("GOT MONTHLY POWER DATA RESPONSE");
             console.log(dataKeys);
-            console.log(dayPowerData);
-            let chartBuilder = new AmChartsXYChartBuilder("daypowerchartdiv");
+            console.log(monthPowerData);
+            let chartBuilder = new AmChartsXYChartBuilder("monthpowerchartdiv");
             chartBuilder.addTitle(CHART_TITLE);
-            chartBuilder.setDataPoints(dayPowerData, "date", dataKeys);
+            chartBuilder.setDataPoints(monthPowerData, "date", dataKeys);
         
             chartStateHolder.current = chartBuilder.chart;
         
@@ -30,7 +30,7 @@ export default function DayPower(props: Props) {
     }, [props.deviceAlias]);
 
     return (
-        <div className="chart" id="daypowerchartdiv">
+        <div className="chart" id="monthpowerchartdiv">
         </div>
     );
 }
