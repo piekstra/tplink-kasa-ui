@@ -26,10 +26,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     # Start this early in case it needs some "boot up time"
     - name: Build and run docker container for tests
-      env:
-        TPLINK_KASA_USERNAME: notreal
-        TPLINK_KASA_PASSWORD: alsofake
-        TPLINK_KASA_API_URL: 'https://wap.pretendtplinkcloud.com'
       run: |
         docker build . -t apiserver
         docker run -d -p 80:80 apiserver

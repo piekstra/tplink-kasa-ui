@@ -3,7 +3,13 @@ from tplinkcloud import TPLinkDeviceManager, TPLinkDeviceManagerPowerTools
 
 class TPLinkService:
 
-    def __init__(self, tplink_kasa_config):        
+    def __init__(self, tplink_kasa_config):
+        if (not tplink_kasa_config.username 
+            or not tplink_kasa_config.password 
+            or not tplink_kasa_config.api_url
+        ):
+            return
+        
         self._device_manager = TPLinkDeviceManager(
             tplink_kasa_config.username, 
             tplink_kasa_config.password, 
