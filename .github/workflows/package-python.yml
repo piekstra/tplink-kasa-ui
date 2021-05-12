@@ -42,6 +42,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-        API_HOST: 'http://localhost:8080'
+        API_HOST: http://127.0.0.1:8080
       run: |
         pytest --verbose
