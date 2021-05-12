@@ -1,0 +1,4 @@
+python-dotenv==0.17.0
+tplink-cloud-api==2.9.0
+fastapi==0.6.3
+uvicorn==0.13.4
