@@ -28,7 +28,7 @@ jobs:
     - name: Build and run docker container for tests
       run: |
         docker build . -t apiserver
-        docker run -d -p 80:8000 apiserver
+        docker run -d -p 80:80 apiserver
     - name: Install dependencies relevant to testing
       run: |
         python -m pip install --upgrade pip
