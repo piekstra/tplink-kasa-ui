@@ -38,7 +38,7 @@ export default class DevicePowerManager {
             .then((data: any) => {
                 console.log('GOT DAY POWER DATA!');
                 console.log(data)
-                let powerData: {[key: number]: DayPowerData} = {};
+                let powerData: { [key: number]: DayPowerData } = {};
                 let keys = Array<string>();
                 data.data.forEach((devicePower: any) => {
                     keys.push(devicePower.name);
@@ -67,9 +67,18 @@ export default class DevicePowerManager {
                     })
                 }
 
+                // Make sure that the data is sorted by timestamp
+                const orderedPowerData = Object.keys(powerData).map(Number).sort().reduce(
+                    (obj: { [key: number]: DayPowerData }, key: number) => {
+                        obj[key] = powerData[key];
+                        return obj;
+                    },
+                    {}
+                );
+
                 // Because the data for the most-recent day (today) 
                 // will almost always be partial, slice it off
-                let values = Object.values(powerData).slice(0, -1);
+                let values = Object.values(orderedPowerData).slice(0, -1);
                 onDataReceive(values, keys);
             });
     }
@@ -82,7 +91,7 @@ export default class DevicePowerManager {
             .then((data: any) => {
                 console.log('GOT MONTH POWER DATA!');
                 console.log(data)
-                let powerData: {[key: number]: DayPowerData} = {};
+                let powerData: { [key: number]: DayPowerData } = {};
                 let keys = Array<string>();
                 data.data.forEach((devicePower: any) => {
                     keys.push(devicePower.name);
@@ -92,7 +101,7 @@ export default class DevicePowerManager {
                         let date = new Date(
                             monthPower.year,
                             monthPower.month - 1
-                        );                        
+                        );
                         // In order to get the current month's days, use the raw month value (1 month ahead)
                         // with days set to 0 which gives us a date that is the last day 
                         // of the previous month (the month we actually care about)
