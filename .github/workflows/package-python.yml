@@ -4,7 +4,8 @@ name: Package Python
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches:
+    - main
   pull_request:
 
 defaults:
