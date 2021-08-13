@@ -6,17 +6,13 @@ on:
   push:
     branches:
     - main
-    paths-ignore:
-    - 'tests/**'
-    - 'ui/**'
-    - '.github/**'
-    - '**.md'
+    paths:
+    - '!**.md'
+    - 'api/**'
   pull_request:
-    paths-ignore:
-    - 'tests/**'
-    - 'ui/**'
-    - '.github/**'
-    - '**.md'
+    paths:
+    - '!**.md'
+    - 'api/**'
 
 defaults:
   run:
