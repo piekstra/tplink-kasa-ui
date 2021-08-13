@@ -5,39 +5,37 @@ name: Package React
 on:
   push:
     branches:
-    - main
+      - main
     paths:
-    - 'ui/**'
-    - '!**.md'
+      - "ui/**"
+      - "!**.md"
   pull_request:
     paths:
-    - 'ui/**'
-    - '!**.md'
+      - "ui/**"
+      - "!**.md"
 
 defaults:
   run:
     working-directory: ./ui
 
 jobs:
-
   build-react:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x, 14.x]
     env:
       CI: true
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install app dependencies
-      run: yarn install
-    - name: Build the app
-      run: yarn build
-    - name: Run tests with coverage
-      run: yarn test -- --coverage
+      - uses: actions/checkout@v2
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install app dependencies
+        run: yarn install
+      - name: Build the app
+        run: yarn build
+      - name: Run tests with coverage
+        run: yarn test -- --coverage

@@ -1,11 +1,11 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import { useState, useEffect } from 'react';
-import Header from './components/Header/Header'
-import Dashboard from './components/Dashboard/Dashboard'
+import React, { useState, useEffect } from 'react';
+import Header from 'src/components/Header/Header';
+import Dashboard from 'src/components/Dashboard/Dashboard';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     serverTime: {
       textAlign: 'center',
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
     amCharts: {
       textAlign: 'center',
     },
-  }),
+  })
 );
 
 function App() {
@@ -21,9 +21,11 @@ function App() {
   const classes = useStyles();
 
   useEffect(() => {
-    fetch('/api/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
-    });
+    fetch('/api/time')
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentTime(data.time);
+      });
   }, []);
 
   return (

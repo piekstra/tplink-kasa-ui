@@ -1,0 +1,6 @@
+test/**
+tmp/**
+tsconfig.json
+nginx/**
+yarn.lock
+.githooks/**
