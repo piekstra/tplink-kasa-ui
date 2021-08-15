@@ -9,9 +9,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import CurrentPower from '../CurrentPower/CurrentPower';
-import DayPower from '../DayPower/DayPower';
-import MonthPower from '../MonthPower/MonthPower';
+import CurrentPower from 'src/components/CurrentPower/CurrentPower';
+import DayPower from 'src/components/DayPower/DayPower';
+import MonthPower from 'src/components/MonthPower/MonthPower';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -109,7 +109,7 @@ export default function Dashboard() {
           <Paper className={classes.paper3}>
             <CurrentPower
               autoRefresh={autoRefresh}
-              refreshInterval={parseInt(refreshInterval) * 1000}
+              refreshInterval={parseInt(refreshInterval, 10) * 1000}
               deviceAlias={devicesLike}
             />
           </Paper>

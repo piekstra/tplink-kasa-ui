@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function useInterval(callback: () => void, delay: number) {
+export default function useInterval(callback: () => void, delay: number): void {
   const savedCallback = useRef<() => void>();
 
   // Remember the latest callback.
@@ -9,6 +9,7 @@ export default function useInterval(callback: () => void, delay: number) {
   }, [callback]);
 
   // Set up the interval.
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     function tick() {
       if (savedCallback.current) {

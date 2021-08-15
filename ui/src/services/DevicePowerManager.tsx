@@ -58,6 +58,9 @@ export default class DevicePowerManager {
         });
 
         // Add 0-values
+        // TODO: fix for in loop
+        // eslint-disable-next-line guard-for-in
+        // eslint-disable-next-line no-restricted-syntax
         for (const timestamp in powerData) {
           keys.forEach((deviceName) => {
             if (!(deviceName in powerData[timestamp])) {
@@ -71,6 +74,7 @@ export default class DevicePowerManager {
           .map(Number)
           .sort()
           .reduce((obj: { [key: number]: DayPowerData }, key: number) => {
+            // eslint-disable-next-line no-param-reassign
             obj[key] = powerData[key];
             return obj;
           }, {});
@@ -116,6 +120,9 @@ export default class DevicePowerManager {
         });
 
         // Add 0-values
+        // TODO: fix for in loop
+        // eslint-disable-next-line guard-for-in
+        // eslint-disable-next-line no-restricted-syntax
         for (const timestamp in powerData) {
           keys.forEach((deviceName) => {
             if (!(deviceName in powerData[timestamp])) {

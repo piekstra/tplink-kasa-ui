@@ -1,13 +1,14 @@
-import { useEffect, useRef } from 'react';
-import useInterval from '../../services/useInterval';
-import DevicePowerManager from '../../services/DevicePowerManager';
-import AmChartsXYChartBuilder from '../../services/AmChartsXYChartBuilder';
+import React, { useEffect, useRef } from 'react';
+import useInterval from 'src/services/useInterval';
+import DevicePowerManager from 'src/services/DevicePowerManager';
+import AmChartsXYChartBuilder from 'src/services/AmChartsXYChartBuilder';
 import './CurrentPower.css';
 
 interface Props {
   autoRefresh: boolean;
   refreshInterval: number;
   deviceAlias: string;
+  // eslint-disable-next-line react/require-default-props
   maxDataPoints?: number;
 }
 

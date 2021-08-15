@@ -1,12 +1,11 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header/Header';
-import Dashboard from './components/Dashboard/Dashboard';
-import Login from './components/Authentication/unauthenticated-app';
+import Header from 'src/components/Header/Header';
+import Dashboard from 'src/components/Dashboard/Dashboard';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     serverTime: {
       textAlign: 'center',
@@ -20,12 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const classes = useStyles();
-
-  // const AuthenticatedApp = React.lazy(() => import('./authenticated-app'));
-  // const UnauthenticatedApp = React.lazy(() => import('./components/Authentication/unauthenticated-app'));
-
-  // const user = useUser()
-  return <Login />;
 
   useEffect(() => {
     fetch('/api/time')
