@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd ./ui && echo "pretend we ran npm run lint:fix && git add ."
