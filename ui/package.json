@@ -14,6 +14,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "eslint-plugin-react-hooks": "^4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
@@ -25,14 +26,25 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix",
-    "prepare": "cd ../ && husky install ./ui/.husky"
+    "lint:fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "git add . && lint-staged",
+      "pre-push": "npm run lint && npm run test -- --watchAll=false"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
+    "*": "prettier --ignore-unknown --write",
+    "*.css": "stylelint",
+    "*.scss": "stylelint --syntax=scss"
   },
   "browserslist": {
     "production": [
@@ -62,7 +74,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "^7.24.0",
-    "husky": "^7.0.1",
+    "husky": "^4.3.0",
     "lint-staged": "11.1.2",
     "prettier": "2.3.2"
   }
