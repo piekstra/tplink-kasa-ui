@@ -1,11 +1,21 @@
 import os
 import pytest
 import requests
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
 
 
 @pytest.fixture(scope='module')
 def client():
     s = requests.Session()
+
+    # Sleeps for 0.5, 1.0, 2.0, ...
+    retries = Retry(
+        total=5,
+        backoff_factor=0.5
+    )
+
+    s.mount(os.environ.get('API_HOST'), HTTPAdapter(max_retries=retries))
     return s
 
 
@@ -15,8 +25,7 @@ class TestAPI(object):
     def _request(self, client, method, path):
         return client.request(
             method=method,
-            url=os.environ.get('API_HOST') + '/api' + path,
-            timeout=10
+            url=os.environ.get('API_HOST') + '/api' + path
         )
 
     def test_get_time(self, client):
