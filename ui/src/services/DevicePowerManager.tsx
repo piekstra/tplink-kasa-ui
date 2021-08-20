@@ -1,3 +1,5 @@
+import ApiConfig from "./api-config.service";
+
 export class CurrentPowerData {
     date: Date = new Date();
     [key: string]: number | Date;
@@ -13,7 +15,7 @@ export default class DevicePowerManager {
     static fetchCurrentPowerData(deviceAlias: string, onDataReceive: (data: CurrentPowerData) => void) {
         // Simple GET request using fetch
         console.log(`Getting current power data for devices like ${deviceAlias}`);
-        fetch(`/api/power/devices/current?named=${deviceAlias}`)
+        fetch(`${ApiConfig.ROOT_PATH}/power/devices/current?named=${deviceAlias}`)
             .then((response: any) => response.json())
             .then((data: any) => {
                 console.log('GOT CURRENT POWER DATA!');
@@ -33,7 +35,7 @@ export default class DevicePowerManager {
     static fetchDailyPowerData(deviceAlias: string, onDataReceive: (data: Array<DayPowerData>, keys: Array<string>) => void) {
         // Simple GET request using fetch
         console.log(`Getting day power data for devices like ${deviceAlias}`);
-        fetch(`/api/power/devices/day?named=${deviceAlias}`)
+        fetch(`${ApiConfig.ROOT_PATH}/power/devices/day?named=${deviceAlias}`)
             .then((response: any) => response.json())
             .then((data: any) => {
                 console.log('GOT DAY POWER DATA!');
@@ -86,7 +88,7 @@ export default class DevicePowerManager {
     static fetchMonthlyPowerData(deviceAlias: string, onDataReceive: (data: Array<DayPowerData>, keys: Array<string>) => void) {
         // Simple GET request using fetch
         console.log(`Getting month power data for devices like ${deviceAlias}`);
-        fetch(`/api/power/devices/month?named=${deviceAlias}`)
+        fetch(`${ApiConfig.ROOT_PATH}/power/devices/month?named=${deviceAlias}`)
             .then((response: any) => response.json())
             .then((data: any) => {
                 console.log('GOT MONTH POWER DATA!');

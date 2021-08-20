@@ -2,6 +2,14 @@
 
 This project uses your Kasa credentials to make queries to the TP-Link Cloud API
 
+## Prerequisites
+
+### Uvicorn
+
+Uvicorn is an HTTP server implementation.
+
+Read more about Uvicorn [here](https://www.uvicorn.org/).
+
 ## Environment
 
 You will need to setup environment variables with proper values in a `.env` file. There is a [`.env.example`](app/configuration/.env.example) provided as an example of what variables to specify.
