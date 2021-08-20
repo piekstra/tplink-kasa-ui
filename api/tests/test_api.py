@@ -2,6 +2,7 @@ import os
 import pytest
 import requests
 
+
 @pytest.fixture(scope='module')
 def client():
     s = requests.Session()
@@ -14,7 +15,8 @@ class TestAPI(object):
     def _request(self, client, method, path):
         return client.request(
             method=method,
-            url=os.environ.get('API_HOST') + '/api' + path
+            url=os.environ.get('API_HOST') + '/api' + path,
+            timeout=10
         )
 
     def test_get_time(self, client):
