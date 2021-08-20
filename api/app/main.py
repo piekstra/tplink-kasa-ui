@@ -6,11 +6,11 @@ from models import DevicesPowerCurrentResponse
 from models import DevicesPowerDayResponse
 from models import DevicesPowerMonthResponse
 from models import User
-from routers import users
+from routers import user
 from dependencies import tplink_service, get_current_user
 
 app = FastAPI()
-app.include_router(users.router)
+app.include_router(user.router)
 
 
 @app.get('/api/time')
