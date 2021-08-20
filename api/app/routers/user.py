@@ -6,8 +6,8 @@ from models import UserAuthToken, User
 
 router = APIRouter(
     # Changing this prefix will affect the oauth2_scheme
-    prefix="/users",
-    tags=["users"],
+    prefix="/api/user",
+    tags=["user"],
     dependencies=[],
     responses={404: {"description": "Not found"}}
 )
