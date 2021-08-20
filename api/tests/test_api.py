@@ -11,8 +11,8 @@ def client():
 
     # Sleeps for 0.5, 1.0, 2.0, ...
     retries = Retry(
-        total=5,
-        backoff_factor=0.5
+        total=20,
+        backoff_factor=0.1
     )
 
     s.mount(os.environ.get('API_HOST'), HTTPAdapter(max_retries=retries))
