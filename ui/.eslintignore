@@ -1,0 +1,11 @@
+.githooks/**
+.husky/**
+build
+coverage
+nginx/**
+node_modules
+test/**
+tmp/**
+tsconfig.json
+yarn.lock
+README.md
