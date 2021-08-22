@@ -6,6 +6,14 @@ This project uses your Kasa credentials to make queries to the TP-Link Cloud API
 
 You will need to setup environment variables with proper values in a `.env` file. There is a [`.env.example`](app/configuration/.env.example) provided as an example of what variables to specify.
 
+Specifically, the `API_USER_ENCRYPTION_SECRET_KEY` variable can have a value containing the result of running this command on your machine: 
+
+```sh
+openssl rand -hex 32
+```
+
+The reason for using that command and explanations of the other variables can be found here: https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
+
 ## Running the API for Development
 
 From the [app](app) folder, you can simply run `uvicorn main:app --reload` to serve the API in development mode.
