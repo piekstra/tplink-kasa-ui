@@ -3,23 +3,23 @@ from tplinkcloud import TPLinkDeviceManager, TPLinkDeviceManagerPowerTools
 
 class TPLinkService:
 
-    def __init__(self, tplink_kasa_config):
-        if (not tplink_kasa_config.username 
-            or not tplink_kasa_config.password 
-            or not tplink_kasa_config.api_url
-        ):
-            return
-        
+    def login(self, username, password, api_url='https://wap.tplinkcloud.com'):
         self._device_manager = TPLinkDeviceManager(
-            tplink_kasa_config.username, 
-            tplink_kasa_config.password, 
-            tplink_cloud_api_host=tplink_kasa_config.api_url,
+            username,
+            password,
+            tplink_cloud_api_host=api_url,
             cache_devices=False,
             prefetch=False,
             verbose=True
         )
+        # We aren't supposed to access this directly, but currently there's no other
+        # officially supported way to determine if the login failed
+        if self._device_manager._auth_token is None:
+            return False
 
         self._device_power_tools = TPLinkDeviceManagerPowerTools(self._device_manager)
+
+        return True
 
     def get_power_data_current(self, device_name=None, device_filter=None):
         devices_like = [device_name] if device_name else device_filter
@@ -48,7 +48,6 @@ class TPLinkService:
 
         return self._jsonify(usage)
 
-
     def _jsonify(self, data):
         if type(data) is list:
             result = []
@@ -64,7 +63,7 @@ class TPLinkService:
             return data
         # classes
         elif hasattr(data, "__dict__"):
-            data_vars = vars(data)            
+            data_vars = vars(data)
             return self._jsonify(data_vars)
         # Enums
         elif hasattr(data, "name"):

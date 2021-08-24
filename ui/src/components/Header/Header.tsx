@@ -1,19 +1,20 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import React from 'react';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flexGrow: 1,
-      minHeight: "48px",
-      marginBottom: "12px"
+      minHeight: '48px',
+      marginBottom: '12px',
     },
     title: {
       flexGrow: 1,
     },
-  }),
+  })
 );
 
 export default function Header() {
