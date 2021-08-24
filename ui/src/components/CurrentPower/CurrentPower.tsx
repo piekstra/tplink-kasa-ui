@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import useInterval from 'src/services/useInterval';
 import DevicePowerManager from 'src/services/DevicePowerManager';
 import AmChartsXYChartBuilder from 'src/services/AmChartsXYChartBuilder';
-import './CurrentPower.css';
+import 'src/components/CurrentPower/CurrentPower.css';
 
 interface Props {
   autoRefresh: boolean;

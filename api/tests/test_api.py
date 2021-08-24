@@ -15,7 +15,7 @@ class TestAPI(object):
     def _request(self, client, method, path):
         return client.request(
             method=method,
-            url=os.environ.get('API_HOST') + '/api' + path
+            url=os.environ.get('API_HOST') + '/api/v1' + path
         )
 
     def test_get_time(self, client):

@@ -7,18 +7,23 @@ from models import DevicesPowerDayResponse
 from models import DevicesPowerMonthResponse
 from models import User
 from routers import user
-from dependencies import tplink_service, get_current_user
+from dependencies import tplink_service, get_current_user, root_path
 
+# TODO support login / auth capability and account view to see current Kasa credentials or change them
+
+# Note that root_path is not implemented via FastAPI(root_path='route') intentionally.
+# This is due to the behavior of Uvicorn in overwriting the root_path.
+# https://fastapi.tiangolo.com/advanced/behind-a-proxy/
 app = FastAPI()
 app.include_router(user.router)
 
 
-@app.get('/api/time')
+@app.get(f'{root_path}/time')
 def get_current_time():
     return {'time': time.time()}
 
 
-@app.get('/api/power/devices/current', response_model=DevicesPowerCurrentResponse)
+@app.get(f'{root_path}/power/devices/current', response_model=DevicesPowerCurrentResponse)
 def get_devices_power_current(named: str, current_user: User = Depends(get_current_user)):
     # Eventually (when this API is hosted for use by multiple users)
     # we will need to leverage data about the current_user to
@@ -34,7 +39,7 @@ def get_devices_power_current(named: str, current_user: User = Depends(get_curre
     }
 
 
-@app.get('/api/power/devices/day', response_model=DevicesPowerDayResponse)
+@app.get(f'{root_path}/power/devices/day', response_model=DevicesPowerDayResponse)
 def get_devices_power_day(named: str, current_user: User = Depends(get_current_user)):
     # Eventually (when this API is hosted for use by multiple users)
     # we will need to leverage data about the current_user to
@@ -48,7 +53,7 @@ def get_devices_power_day(named: str, current_user: User = Depends(get_current_u
     }
 
 
-@app.get('/api/power/devices/month', response_model=DevicesPowerMonthResponse)
+@app.get(f'{root_path}/power/devices/month', response_model=DevicesPowerMonthResponse)
 def get_devices_power_month(named: str, current_user: User = Depends(get_current_user)):
     # Eventually (when this API is hosted for use by multiple users)
     # we will need to leverage data about the current_user to
