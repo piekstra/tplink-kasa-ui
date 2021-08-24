@@ -6,8 +6,6 @@ from routers import device_power
 
 from dependencies import root_path
 
-# TODO support login / auth capability and account view to see current Kasa credentials or change them
-
 # Note that root_path is not implemented via FastAPI(root_path='route') intentionally.
 # This is due to the behavior of Uvicorn in overwriting the root_path.
 # https://fastapi.tiangolo.com/advanced/behind-a-proxy/

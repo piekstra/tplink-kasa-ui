@@ -27,3 +27,19 @@ The reason for using that command and explanations of the other variables can be
 From the [app](app) folder, you can simply run `uvicorn main:app --reload` to serve the API in development mode.
 
 The app's Swagger page will then be available at http://localhost:8000/docs
+
+### Running as a Docker Container
+
+You can leverage the [`Dockerfile`](Dockerfile) to run the API using the following command which will build the docker container image and run it:
+
+```sh
+docker build . -t apiserver
+
+docker run -d \
+    -p 80:80 \
+    apiserver
+```
+
+The API will be available at: http://localhost/
+
+This can be useful to leverage the same process as the GitHub Actions Workflow for packaging the Python code.
