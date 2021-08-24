@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
-import useInterval from '../../services/useInterval'
-import DevicePowerManager from '../../services/DevicePowerManager'
-import AmChartsXYChartBuilder from '../../services/AmChartsXYChartBuilder'
-import './CurrentPower.css';
+import useInterval from 'src/services/useInterval'
+import DevicePowerManager from 'src/services/DevicePowerManager'
+import AmChartsXYChartBuilder from 'src/services/AmChartsXYChartBuilder'
+import 'src/components/CurrentPower/CurrentPower.css';
 
 interface Props {
     autoRefresh: boolean,

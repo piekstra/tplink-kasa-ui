@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
-import DevicePowerManager from '../../services/DevicePowerManager'
-import AmChartsXYChartBuilder from '../../services/AmChartsXYChartBuilder'
-import './MonthPower.css';
+import DevicePowerManager from 'src/services/DevicePowerManager'
+import AmChartsXYChartBuilder from 'src/services/AmChartsXYChartBuilder'
+import 'src/components/MonthPower/MonthPower.css';
 
 interface Props {
     deviceAlias: string

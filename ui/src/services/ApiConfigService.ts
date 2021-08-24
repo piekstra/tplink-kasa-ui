@@ -1,3 +1,3 @@
-export default class ApiConfig {
+export default class ApiConfigService {
     static ROOT_PATH: string = "/api/v1";
 }

@@ -1,4 +1,4 @@
-import ApiConfig from "./api-config.service";
+import ApiConfig from "src/services/ApiConfigService";
 
 export class CurrentPowerData {
     date: Date = new Date();
