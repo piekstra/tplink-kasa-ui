@@ -7,14 +7,13 @@ from models import DevicesPowerDayResponse
 from models import DevicesPowerMonthResponse
 from models import User
 from routers import user
-from dependencies import tplink_service, get_current_user
+from dependencies import tplink_service, get_current_user, root_path
 
 # TODO support login / auth capability and account view to see current Kasa credentials or change them
 
 # Note that root_path is not implemented via FastAPI(root_path='route') intentionally.
 # This is due to the behavior of Uvicorn in overwriting the root_path.
 # https://fastapi.tiangolo.com/advanced/behind-a-proxy/
-root_path="/api/v1"
 app = FastAPI()
 app.include_router(user.router)
 

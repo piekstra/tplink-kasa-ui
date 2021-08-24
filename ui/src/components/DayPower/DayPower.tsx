@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react'
-import DevicePowerManager from 'src/services/DevicePowerManager'
-import AmChartsXYChartBuilder from 'src/services/AmChartsXYChartBuilder'
+import React, { useEffect, useRef } from 'react';
+import DevicePowerManager from 'src/services/DevicePowerManager';
+import AmChartsXYChartBuilder from 'src/services/AmChartsXYChartBuilder';
 import 'src/components/DayPower/DayPower.css';
 
 interface Props {

@@ -8,8 +8,10 @@ from services import TPLinkService
 from services import AuthService, UserDatabase
 from configuration import Configuration
 
+root_path="/api/v1"
+
 # Note that this has to have parity with the `users` router's `token` endpoint
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f'{root_path}/user/token')
 user_db = UserDatabase()
 config = Configuration()
 auth_service = AuthService(

@@ -1,3 +1,3 @@
 export default class ApiConfigService {
-    static ROOT_PATH: string = "/api/v1";
+  static ROOT_PATH: string = '/api/v1';
 }
