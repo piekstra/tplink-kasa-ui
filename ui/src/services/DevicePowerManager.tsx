@@ -1,4 +1,4 @@
-import ApiConfig from 'src/services/ApiConfigService';
+import ApiConfigService from 'src/services/ApiConfigService';
 
 export class CurrentPowerData {
   date: Date = new Date();
@@ -38,7 +38,7 @@ export default class DevicePowerManager {
   ) {
     // Simple GET request using fetch
     console.log(`Getting day power data for devices like ${deviceAlias}`);
-    fetch(`${ApiConfig.ROOT_PATH}/power/devices/day?named=${deviceAlias}`)
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/day?named=${deviceAlias}`)
       .then((response: any) => response.json())
       .then((data: any) => {
         console.log('GOT DAY POWER DATA!');
@@ -94,7 +94,7 @@ export default class DevicePowerManager {
   ) {
     // Simple GET request using fetch
     console.log(`Getting month power data for devices like ${deviceAlias}`);
-    fetch(`${ApiConfig.ROOT_PATH}/power/devices/month?named=${deviceAlias}`)
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/month?named=${deviceAlias}`)
       .then((response: any) => response.json())
       .then((data: any) => {
         console.log('GOT MONTH POWER DATA!');

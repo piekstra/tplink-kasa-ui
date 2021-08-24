@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import React, { useState, useEffect } from 'react';
 import Header from 'src/components/Header/Header';
 import Dashboard from 'src/components/Dashboard/Dashboard';
-import ApiConfig from 'src/services/ApiConfigService';
+import ApiConfigService from 'src/services/ApiConfigService';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,7 +22,7 @@ function App() {
   const classes = useStyles();
 
   useEffect(() => {
-    fetch(`${ApiConfig.ROOT_PATH}/time`)
+    fetch(`${ApiConfigService.ROOT_PATH}/time`)
       .then((res) => res.json())
       .then((data) => {
         setCurrentTime(data.time);
