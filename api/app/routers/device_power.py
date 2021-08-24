@@ -11,7 +11,7 @@ from models import DevicesPowerDayResponse
 from models import DevicesPowerMonthResponse
 
 router = APIRouter(
-    prefix='{root_path}/power/devices',
+    prefix=f'{root_path}/power/devices',
     tags=['power'],
     dependencies=[Depends(get_current_user)],
     responses={404: {'description': 'Not found'}}
