@@ -19,7 +19,7 @@ services:
     healthcheck:
       # slightly confusing, but the container name is the hostname
       # so we have api twice
-      test: curl --fail -s http://api/api/time || exit 1
+      test: curl --fail -s http://api/api/v1/time || exit 1
       interval: 5s
       timeout: 10s
       retries: 3
