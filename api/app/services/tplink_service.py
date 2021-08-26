@@ -3,23 +3,43 @@ from tplinkcloud import TPLinkDeviceManager, TPLinkDeviceManagerPowerTools
 
 class TPLinkService:
 
-    def login(self, username, password, api_url='https://wap.tplinkcloud.com'):
+    def __init__(self):
+        self._default_api_url = 'https://wap.tplinkcloud.com'
+
+    # username and password are ignored if auth_token is specified
+    def _create_device_managers(self, username=None, password=None, auth_token=None, api_url=None):
+        tplink_api_url = api_url if api_url else self._default_api_url
         self._device_manager = TPLinkDeviceManager(
-            username,
-            password,
-            tplink_cloud_api_host=api_url,
+            tplink_cloud_api_host=tplink_api_url,
             cache_devices=False,
             prefetch=False,
             verbose=True
         )
-        # We aren't supposed to access this directly, but currently there's no other
-        # officially supported way to determine if the login failed
-        if self._device_manager._auth_token is None:
-            return False
-
         self._device_power_tools = TPLinkDeviceManagerPowerTools(self._device_manager)
 
-        return True
+        if auth_token:
+            self._device_manager.set_auth_token(auth_token)
+        elif username and password:
+            auth_token = self._device_manager.login(username, password)
+
+        # We return the auth_token back if specified
+        # If username and password were set, it will be the result of the login operation
+        # for the device manager, which could be None
+        # If none of username, password, auth_token were specified, it will be None
+        return auth_token
+
+    def set_auth_token(self, auth_token, api_url=None):
+        return self._create_device_managers(
+            auth_token=auth_token,
+            api_url=api_url
+        )
+
+    def login(self, username, password, api_url=None):
+        return self._create_device_managers(
+            username=username,
+            password=password,
+            api_url=api_url
+        )
 
     def get_power_data_current(self, device_name=None, device_filter=None):
         devices_like = [device_name] if device_name else device_filter

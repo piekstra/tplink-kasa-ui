@@ -33,19 +33,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
     # Start this early in case it needs some "boot up time"
     - name: Build and run docker container for tests
-      env: 
-        API_USER_ENCRYPTION_SECRET_KEY: ${{ secrets.API_USER_ENCRYPTION_SECRET_KEY }}
-        API_USER_ACCESS_TOKEN_EXPIRE_MINUTES: 30
-        API_USER_ENCRYPTION_TOKEN_ALGORITHM: HS256
-        API_USER_ENCRYPTION_PASSWORD_HASH_ALGORITHM: bcrypt  
       run: |
         docker build . -t apiserver
         docker run -d \
           -p 80:80 \
-          -e API_USER_ENCRYPTION_SECRET_KEY \
-          -e API_USER_ACCESS_TOKEN_EXPIRE_MINUTES \
-          -e API_USER_ENCRYPTION_TOKEN_ALGORITHM \
-          -e API_USER_ENCRYPTION_PASSWORD_HASH_ALGORITHM \
           apiserver
     - name: Install dependencies relevant to testing
       run: |
