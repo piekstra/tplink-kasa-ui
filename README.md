@@ -4,6 +4,10 @@ A simple frontend to observe and interact with Kasa devices. At this time, only 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## API
+
+The backend API server for this project is maintained here: https://github.com/piekstra/tplinkcloud-service
+
 ## Prerequisites
 
 * [Docker Compose](https://docs.docker.com/compose/install/)
@@ -31,7 +35,7 @@ You will also see any lint errors in the console.
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
+Launches the test runner in the interactive watch mode.
 
 ### `yarn build`
 
