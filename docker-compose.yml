@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   ui:
-    build: ./ui
+    build: .
     restart: always
     ports:
       - 80:80
