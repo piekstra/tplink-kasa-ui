@@ -6,10 +6,6 @@ A simple frontend to observe and interact with Kasa devices. At this time, only 
 
 * [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Configuring the Project
-
-Before running the project, you will need to follow the instructions for the API [here](api/README.md) to configure the API server's environment.
-
 ## Running the Project
 
 To run, simply run the following command:

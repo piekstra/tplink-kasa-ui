@@ -14,7 +14,7 @@ services:
       timeout: 10s
       retries: 3
   api:
-    build: ./api
+    image: ghcr.io/piekstra/tplinkcloud-service:v1.0.0
     restart: always
     healthcheck:
       # slightly confusing, but the container name is the hostname
