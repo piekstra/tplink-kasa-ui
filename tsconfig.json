@@ -7,7 +7,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "node",
@@ -24,6 +23,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
+      "./types/vendor.d.ts",
       "node_modules/@types"
     ],
     "noFallthroughCasesInSwitch": true,
@@ -36,6 +36,7 @@
   ],
   "compileOnSave": true,
   "include": [
-    "src"
+    "src/**/*",
+    "types/*"
   ]
 }
