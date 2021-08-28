@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Header from 'src/components/Header/Header';
 import Dashboard from 'src/components/Dashboard/Dashboard';
 import ApiConfigService from 'src/services/ApiConfigService';
+import Authentication from 'src/components/Authentication';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,6 +32,7 @@ function App() {
 
   return (
     <div>
+      <Authentication />
       <CssBaseline />
       <Header />
       <Container maxWidth="xl">
