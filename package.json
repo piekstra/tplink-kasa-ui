@@ -4,34 +4,42 @@
   "private": true,
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.18",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "@mui/material": "^5.0.0",
     "@testing-library/dom": "^7.21.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@types/react": "^17.0.22",
+    "@types/react-dom": "^17.0.9",
+    "add": "^2.0.6",
     "eslint-plugin-react-hooks": "^4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yarn": "^1.22.11"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix",
-    "prepare": "husky install .husky"
+    "prepare": "husky install .husky",
+    "lint:js": "eslint . --ext .ts,.js,.tsx,.jsx",
+    "lint:prettier": "prettier \"**/*.js\" \"**/*.json\" \"**/*.ts\" \"**/*.tsx\" --list-different",
+    "lint:fix": "npm run lint:js -- --fix",
+    "format:fix": "npm run lint:fix && npm run lint:prettier -- --write"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,scss}": [
-      "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write --ignore-path .eslintignore",
+      "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write",
       "git add"
     ]
   },

@@ -14,9 +14,9 @@ export default function MonthPower(props: Props) {
 
   useEffect(() => {
     DevicePowerManager.fetchMonthlyPowerData(props.deviceAlias, (monthPowerData, dataKeys) => {
-      console.log('GOT MONTHLY POWER DATA RESPONSE');
-      console.log(dataKeys);
-      console.log(monthPowerData);
+      // console.log('GOT MONTHLY POWER DATA RESPONSE');
+      // console.log(dataKeys);
+      // console.log(monthPowerData);
       const chartBuilder = new AmChartsXYChartBuilder('monthpowerchartdiv');
       chartBuilder.addTitle(CHART_TITLE);
       chartBuilder.setDataPoints(monthPowerData, 'date', dataKeys);
