@@ -14,6 +14,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "client-oauth2": "^4.3.3",
     "eslint-plugin-react-hooks": "^4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -26,8 +27,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix",
-    "prepare": "husky install .husky"
+    "prepare": "husky install .husky",
+    "lint:js": "eslint . --ext .ts,.js,.tsx,.jsx",
+    "lint:prettier": "prettier \"**/*.js\" \"**/*.json\" \"**/*.ts\" \"**/*.tsx\" \"**/*.scss\" --ignore-path .eslintignore --list-different",
+    "lint:fix": "npm run lint:js -- --fix",
+    "format:fix": "npm run lint:fix && npm run lint:prettier -- --write --ignore-path .eslintignore"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,scss}": [

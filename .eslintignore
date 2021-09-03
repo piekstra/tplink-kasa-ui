@@ -9,3 +9,7 @@ tmp/**
 tsconfig.json
 yarn.lock
 README.md
+.prettierrc.json
+public/manifest.json
+package.json
+tests/dockerized-project.postman_collection.json
