@@ -30,20 +30,26 @@ function App() {
       });
   }, []);
 
+  const isAuthenticated = false;
+
   return (
     <div>
       <Authentication />
-      <CssBaseline />
-      <Header />
-      <Container maxWidth="xl">
-        <Dashboard />
-        <p className={classes.serverTime}>The current time is {currentTime}.</p>
-        <p className={classes.amCharts}>
-          <a href="https://www.amcharts.com/docs/v4/" target="_blank" rel="noreferrer">
-            Charts are provided by amCharts 4
-          </a>
-        </p>
-      </Container>
+      {isAuthenticated && (
+        <div>
+          <CssBaseline />
+          <Header />
+          <Container maxWidth="xl">
+            <Dashboard />
+            <p className={classes.serverTime}>The current time is {currentTime}.</p>
+            <p className={classes.amCharts}>
+              <a href="https://www.amcharts.com/docs/v4/" target="_blank" rel="noreferrer">
+                Charts are provided by amCharts 4
+              </a>
+            </p>
+          </Container>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,7 +8,15 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { ResourceOwnerClient } from 'src/components/Authentication/auth-client';
+import { authClient } from 'src/components/Authentication/auth-client';
+
+// interface Token {
+//   client: ClientOAuth2;
+//   data: Data;
+//   tokenType: string;
+//   accessToken: string;
+//   refreshToken: string;
+// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,23 +49,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// const setSession = (authResult: { data: { expires_in: number; access_token: string; refresh_token: string } }) => {
+//   const expiresAt = JSON.stringify(authResult.data.expires_in * 60000 + new Date().getTime());
+//   localStorage.setItem('access_token', authResult.data.access_token);
+//   localStorage.setItem('refresh_token', authResult.data.refresh_token);
+//   localStorage.setItem('expires_at', expiresAt);
+// };
+
 export default function UnauthenticatedApp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  console.log(email, password);
   const attemptLogin = async () => {
-    const tokenParams = {
-      username: email,
-      password,
-      scope: 'login',
-    };
-
     try {
-      const accessToken = await ResourceOwnerClient.getToken(tokenParams);
-      console.log({ accessToken });
+      const authResponse = await authClient.owner.getToken('gkeanoxbxcozbewnli@ianvvn.com', 'asdXUuu86Zbj');
+      // setSession(authResponse.data);
+      console.log({ authResponse });
     } catch (error: any) {
       console.log('Access Token Error', error.message);
     }
   };
+
   const classes = useStyles();
 
   return (
