@@ -7,14 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import OAuth2Login from 'react-simple-oauth2-login';
-
-const onSuccess = (response: any) => {
-  console.log({ response });
-};
-const onFailure = (response: any) => {
-  console.log({ response });
-};
+import Button from '@material-ui/core/Button';
+import { ResourceOwnerClient } from 'src/components/Authentication/auth-client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,13 +42,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UnauthenticatedApp() {
-  const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const params = {
-    email,
-    password,
+  const attemptLogin = async () => {
+    const tokenParams = {
+      username: email,
+      password,
+      scope: 'login',
+    };
+
+    try {
+      const accessToken = await ResourceOwnerClient.getToken(tokenParams);
+      console.log({ accessToken });
+    } catch (error: any) {
+      console.log('Access Token Error', error.message);
+    }
   };
+  const classes = useStyles();
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -92,17 +97,16 @@ export default function UnauthenticatedApp() {
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <OAuth2Login
-              className="login-button"
-              authorizationUrl={process.env.loginUrl}
-              clientId={process.env.clientId}
-              redirectUri={process.env.redirectUri}
-              scope={params}
-              responseType="token"
-              buttonText="Login"
-              onSuccess={onSuccess}
-              onFailure={onFailure}
-            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={attemptLogin}
+            >
+              Sign In
+            </Button>
           </form>
         </div>
       </Grid>
