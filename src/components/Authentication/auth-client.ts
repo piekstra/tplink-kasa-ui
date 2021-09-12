@@ -11,7 +11,7 @@ interface ModuleOptions {
 }
 // https://www.npmjs.com/package/client-oauth2
 
-const AUTHORIZATION_URL = `${ApiConfigService.ROOT_PATH}/login`;
+const AUTHORIZATION_URL = `${ApiConfigService.ROOT_PATH}/api/v1/user/token`;
 // const REDIRECT_URL = `${ApiConfigService.ROOT_PATH}`;
 // const id = process.env.OAUTH_CLIENT_ID || '';
 //  const secret = process.env.CLIENT_SECRET || '';
