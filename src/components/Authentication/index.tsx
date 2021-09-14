@@ -49,25 +49,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const setSession = (authResult: { data: { expires_in: number; access_token: string; refresh_token: string } }) => {
-//   const expiresAt = JSON.stringify(authResult.data.expires_in * 60000 + new Date().getTime());
-//   localStorage.setItem('access_token', authResult.data.access_token);
-//   localStorage.setItem('refresh_token', authResult.data.refresh_token);
-//   localStorage.setItem('expires_at', expiresAt);
-// };
-
 export default function UnauthenticatedApp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  console.log(email, password);
+
+  const setSession = (authResult: { tokenType: string; accessToken: string; refreshToken: string }) => {
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('refresh_token', authResult.refreshToken);
+  };
+
   const attemptLogin = async () => {
     try {
-      const authResponse = await authClient.owner.getToken('gkeanoxbxcozbewnli@ianvvn.com', 'asdXUuu86Zbj');
-      // setSession(authResponse.data);
+      const authResponse = await authClient.owner.getToken(email, password);
+      setSession(authResponse);
       console.log({ authResponse });
     } catch (error: any) {
       console.log('Access Token Error', error.message);
     }
+  };
+  const handleLogin = () => {
+    console.log('inside the onClick');
+    console.log(email, password);
+    attemptLogin();
   };
 
   const classes = useStyles();
@@ -95,6 +98,7 @@ export default function UnauthenticatedApp() {
               name="email"
               autoComplete="email"
               autoFocus
+              defaultValue="gkeanoxbxcozbewnli@ianvvn.com"
               onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
@@ -107,6 +111,7 @@ export default function UnauthenticatedApp() {
               type="password"
               id="password"
               autoComplete="current-password"
+              defaultValue="asdXUuu86Zbj"
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
@@ -115,7 +120,7 @@ export default function UnauthenticatedApp() {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={attemptLogin}
+              onClick={handleLogin}
             >
               Sign In
             </Button>
