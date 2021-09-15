@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Header from 'src/components/Header/Header';
 import Dashboard from 'src/components/Dashboard/Dashboard';
 import ApiConfigService from 'src/services/ApiConfigService';
+import UnauthenticatedApp from 'src/components/Authentication';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,11 +30,11 @@ function App() {
       });
   }, []);
 
-  const isAuthenticated = false;
-
+  const isAuthenticated = localStorage.getItem('access_token');
+  console.log({ isAuthenticated });
   return (
     <div>
-      <Authentication />
+      <UnauthenticatedApp />
       {isAuthenticated && (
         <div>
           <CssBaseline />

@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -53,23 +54,17 @@ export default function UnauthenticatedApp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const setSession = (authResult: { tokenType: string; accessToken: string; refreshToken: string }) => {
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('refresh_token', authResult.refreshToken);
-  };
+  // const setSession = (authResult: { tokenType: string; accessToken: string; refreshToken: string }) => {
+  //   localStorage.setItem('access_token', authResult.accessToken);
+  //   localStorage.setItem('refresh_token', authResult.refreshToken);
+  // };
 
   const attemptLogin = async () => {
-    try {
-      const authResponse = await authClient.owner.getToken(email, password);
-      setSession(authResponse);
-      console.log({ authResponse });
-    } catch (error: any) {
-      console.log('Access Token Error', error.message);
-    }
+    const authResponse = await authClient.owner.getToken(email, password);
+    console.log({ authResponse });
   };
   const handleLogin = () => {
     console.log('inside the onClick');
-    console.log(email, password);
     attemptLogin();
   };
 
