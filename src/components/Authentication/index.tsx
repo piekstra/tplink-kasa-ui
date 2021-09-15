@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { authClient } from 'src/components/Authentication/auth-client';
+import ApiConfigService from 'src/services/ApiConfigService';
 
 // interface Token {
 //   client: ClientOAuth2;
@@ -53,19 +53,23 @@ const useStyles = makeStyles((theme) => ({
 export default function UnauthenticatedApp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const AUTHORIZATION_URL = `${ApiConfigService.ROOT_PATH}/user/token`;
   // const setSession = (authResult: { tokenType: string; accessToken: string; refreshToken: string }) => {
   //   localStorage.setItem('access_token', authResult.accessToken);
   //   localStorage.setItem('refresh_token', authResult.refreshToken);
   // };
 
   const attemptLogin = async () => {
-    const authResponse = await authClient.owner.getToken(email, password);
-    console.log({ authResponse });
-  };
-  const handleLogin = () => {
-    console.log('inside the onClick');
-    attemptLogin();
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('accept', 'application/json');
+    const response = await fetch(AUTHORIZATION_URL, {
+      method: 'POST',
+      headers,
+      body: `grant_type=&username=${email}&password=${password}`,
+    });
+    console.log(response.json());
+    return response.json();
   };
 
   const classes = useStyles();
@@ -115,7 +119,7 @@ export default function UnauthenticatedApp() {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleLogin}
+              onClick={attemptLogin}
             >
               Sign In
             </Button>
