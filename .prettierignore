@@ -1,0 +1,14 @@
+# Ignore artifacts
+build
+coverage
+
+# Ignore file types
+*.json
+*.md
+*.css
+*.svg
+*.yml
+*.html
+
+# Ignore explicit files
+.eslintignore
