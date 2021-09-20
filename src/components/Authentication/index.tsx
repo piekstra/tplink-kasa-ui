@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-debugger */
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import ApiConfigService from 'src/services/ApiConfigService';
 // import ApiConfigService from 'src/services/ApiConfigService';
 
 // interface Token {
@@ -51,20 +52,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UnauthenticatedApp() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export interface Prop {
+  handleAuthenticated: () => void;
+}
+
+export default function UnauthenticatedApp(props: Prop) {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   // const AUTHORIZATION_URL = `${ApiConfigService.ROOT_PATH}/user/token`;
   // const setSession = (authResult: { tokenType: string; accessToken: string; refreshToken: string }) => {
   //   localStorage.setItem('access_token', authResult.accessToken);
   //   localStorage.setItem('refresh_token', authResult.refreshToken);
   // };
 
-  const attemptLogin = () => {
+  const attemptLogin = (event: FormEvent) => {
+    event.preventDefault();
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     headers.append('accept', 'application/json');
-    fetch('http://localhost:8000/api/v1/user/token', {
+    fetch(`${ApiConfigService.ROOT_PATH}/user/token`, {
       method: 'POST',
       headers,
       body: `grant_type=&username=${email}&password=${password}`,
@@ -73,9 +79,14 @@ export default function UnauthenticatedApp() {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.blob();
+
+        return response.json();
       })
-      .then((data) => console.log(data))
+      .then((data) => {
+        // console.log(data);
+        localStorage.setItem('access_token', data.access_token);
+        props.handleAuthenticated();
+      })
       .catch((error) => console.error('There has been a problem with your fetch operation:', error));
   };
 
@@ -93,7 +104,7 @@ export default function UnauthenticatedApp() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={attemptLogin} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -120,14 +131,7 @@ export default function UnauthenticatedApp() {
               defaultValue="asdXUuu86Zbj"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={attemptLogin}
-            >
+            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign In
             </Button>
           </form>

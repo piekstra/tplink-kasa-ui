@@ -21,6 +21,7 @@ const useStyles = makeStyles(() =>
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const classes = useStyles();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('access_token'));
 
   useEffect(() => {
     fetch(`${ApiConfigService.ROOT_PATH}/time`)
@@ -30,11 +31,22 @@ function App() {
       });
   }, []);
 
-  const isAuthenticated = localStorage.getItem('access_token');
-  // console.log({ isAuthenticated });
+  useEffect(() => {
+    fetch(`${ApiConfigService.ROOT_PATH}/time`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentTime(data.time);
+      });
+  }, []);
+
+  const handleAuthenticated = () => {
+    setIsAuthenticated(!!localStorage.getItem('access_token'));
+  };
+
+  console.log({ isAuthenticated });
   return (
     <div>
-      <UnauthenticatedApp />
+      {!isAuthenticated && <UnauthenticatedApp handleAuthenticated={handleAuthenticated} />}
       {isAuthenticated && (
         <div>
           <CssBaseline />
