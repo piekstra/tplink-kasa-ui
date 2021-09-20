@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   const isAuthenticated = localStorage.getItem('access_token');
-  console.log({ isAuthenticated });
+  // console.log({ isAuthenticated });
   return (
     <div>
       <UnauthenticatedApp />

@@ -14,9 +14,9 @@ export default function DayPower(props: Props) {
 
   useEffect(() => {
     DevicePowerManager.fetchDailyPowerData(props.deviceAlias, (dayPowerData, dataKeys) => {
-      console.log('GOT DAILY POWER DATA RESPONSE');
-      console.log(dataKeys);
-      console.log(dayPowerData);
+      // console.log('GOT DAILY POWER DATA RESPONSE');
+      // console.log(dataKeys);
+      // console.log(dayPowerData);
       const chartBuilder = new AmChartsXYChartBuilder('daypowerchartdiv');
       chartBuilder.addTitle(CHART_TITLE);
       chartBuilder.setDataPoints(dayPowerData, 'date', dataKeys);
