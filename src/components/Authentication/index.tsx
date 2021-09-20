@@ -101,7 +101,7 @@ export default function UnauthenticatedApp(props: Prop) {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography id="sign-in-header" component="h1" variant="h5">
             Sign in
           </Typography>
           <form className={classes.form} onSubmit={attemptLogin} noValidate>
