@@ -16,7 +16,7 @@ export default class DevicePowerManager {
     // Simple GET request using fetch
     // console.log(`Getting current power data for devices like ${deviceAlias}`);
     const headers = new Headers();
-    headers.append('Authentication', `Bearer ${localStorage.getItem('access_token')}`);
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
     fetch(`${ApiConfigService.ROOT_PATH}/power/devices/current?named=${deviceAlias}`, { method: 'GET', headers })
       .then((response: any) => response.json())
       .then((data: any) => {
@@ -44,7 +44,9 @@ export default class DevicePowerManager {
   ) {
     // Simple GET request using fetch
     // console.log(`Getting day power data for devices like ${deviceAlias}`);
-    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/day?named=${deviceAlias}`)
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/day?named=${deviceAlias}`, { method: 'GET', headers })
       .then((response: any) => response.json())
       .then((data: any) => {
         // console.log('GOT DAY POWER DATA!');
@@ -103,7 +105,9 @@ export default class DevicePowerManager {
   ) {
     // Simple GET request using fetch
     // console.log(`Getting month power data for devices like ${deviceAlias}`);
-    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/month?named=${deviceAlias}`)
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/month?named=${deviceAlias}`, { method: 'GET', headers })
       .then((response: any) => response.json())
       .then((data: any) => {
         // console.log('GOT MONTH POWER DATA!');

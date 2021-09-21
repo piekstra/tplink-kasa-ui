@@ -43,7 +43,6 @@ function App() {
     setIsAuthenticated(!!localStorage.getItem('access_token'));
   };
 
-  console.log({ isAuthenticated });
   return (
     <div>
       {!isAuthenticated && <UnauthenticatedApp handleAuthenticated={handleAuthenticated} />}
