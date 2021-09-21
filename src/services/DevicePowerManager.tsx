@@ -14,12 +14,18 @@ export interface DayPowerData {
 export default class DevicePowerManager {
   static fetchCurrentPowerData(deviceAlias: string, onDataReceive: (data: CurrentPowerData) => void) {
     // Simple GET request using fetch
-    console.log(`Getting current power data for devices like ${deviceAlias}`);
-    fetch(`/api/power/devices/current?named=${deviceAlias}`)
+    // console.log(`Getting current power data for devices like ${deviceAlias}`);
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/current?named=${deviceAlias}`, { method: 'GET', headers })
       .then((response: any) => response.json())
       .then((data: any) => {
-        console.log('GOT CURRENT POWER DATA!');
-        console.log(data);
+        // console.log('GOT CURRENT POWER DATA!');
+        // console.log(data);
+        // We should generalize some sort of unauthenticated workflow
+        if (data?.detail && data?.detail === 'Not authenticated') {
+          return;
+        }
         const latestPowerData = new CurrentPowerData();
         data.data.forEach((devicePower: any) => {
           let powerData = devicePower.data.power_mw / 1000;
@@ -37,12 +43,17 @@ export default class DevicePowerManager {
     onDataReceive: (data: Array<DayPowerData>, keys: Array<string>) => void
   ) {
     // Simple GET request using fetch
-    console.log(`Getting day power data for devices like ${deviceAlias}`);
-    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/day?named=${deviceAlias}`)
+    // console.log(`Getting day power data for devices like ${deviceAlias}`);
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/day?named=${deviceAlias}`, { method: 'GET', headers })
       .then((response: any) => response.json())
       .then((data: any) => {
-        console.log('GOT DAY POWER DATA!');
-        console.log(data);
+        // console.log('GOT DAY POWER DATA!');
+        // console.log(data);
+        if (data?.detail && data?.detail === 'Not authenticated') {
+          return;
+        }
         const powerData: { [key: number]: DayPowerData } = {};
         const keys = Array<string>();
         data.data.forEach((devicePower: any) => {
@@ -93,12 +104,17 @@ export default class DevicePowerManager {
     onDataReceive: (data: Array<DayPowerData>, keys: Array<string>) => void
   ) {
     // Simple GET request using fetch
-    console.log(`Getting month power data for devices like ${deviceAlias}`);
-    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/month?named=${deviceAlias}`)
+    // console.log(`Getting month power data for devices like ${deviceAlias}`);
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    fetch(`${ApiConfigService.ROOT_PATH}/power/devices/month?named=${deviceAlias}`, { method: 'GET', headers })
       .then((response: any) => response.json())
       .then((data: any) => {
-        console.log('GOT MONTH POWER DATA!');
-        console.log(data);
+        // console.log('GOT MONTH POWER DATA!');
+        // console.log(data);
+        if (data?.detail && data?.detail === 'Not authenticated') {
+          return;
+        }
         const powerData: { [key: number]: DayPowerData } = {};
         const keys = Array<string>();
         data.data.forEach((devicePower: any) => {
