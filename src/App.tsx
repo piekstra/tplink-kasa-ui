@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Header from 'src/components/Header/Header';
 import Dashboard from 'src/components/Dashboard/Dashboard';
 import ApiConfigService from 'src/services/ApiConfigService';
-import UnauthenticatedApp from 'src/components/Authentication';
+import Authentication from 'src/components/Authentication';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,21 +31,13 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    fetch(`${ApiConfigService.ROOT_PATH}/time`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCurrentTime(data.time);
-      });
-  }, []);
-
   const handleAuthenticated = () => {
     setIsAuthenticated(!!localStorage.getItem('access_token'));
   };
 
   return (
     <div>
-      {!isAuthenticated && <UnauthenticatedApp handleAuthenticated={handleAuthenticated} />}
+      {!isAuthenticated && <Authentication handleAuthenticated={handleAuthenticated} />}
       {isAuthenticated && (
         <div>
           <CssBaseline />
