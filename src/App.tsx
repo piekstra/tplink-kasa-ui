@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Header from 'src/components/Header/Header';
 import Dashboard from 'src/components/Dashboard/Dashboard';
 import ApiConfigService from 'src/services/ApiConfigService';
+import Authentication from 'src/components/Authentication';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,6 +21,7 @@ const useStyles = makeStyles(() =>
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const classes = useStyles();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('access_token'));
 
   useEffect(() => {
     fetch(`${ApiConfigService.ROOT_PATH}/time`)
@@ -29,19 +31,28 @@ function App() {
       });
   }, []);
 
+  const handleAuthenticated = () => {
+    setIsAuthenticated(!!localStorage.getItem('access_token'));
+  };
+
   return (
     <div>
-      <CssBaseline />
-      <Header />
-      <Container maxWidth="xl">
-        <Dashboard />
-        <p className={classes.serverTime}>The current time is {currentTime}.</p>
-        <p className={classes.amCharts}>
-          <a href="https://www.amcharts.com/docs/v4/" target="_blank" rel="noreferrer">
-            Charts are provided by amCharts 4
-          </a>
-        </p>
-      </Container>
+      {!isAuthenticated && <Authentication handleAuthenticated={handleAuthenticated} />}
+      {isAuthenticated && (
+        <div>
+          <CssBaseline />
+          <Header />
+          <Container maxWidth="xl">
+            <Dashboard />
+            <p className={classes.serverTime}>The current time is {currentTime}.</p>
+            <p className={classes.amCharts}>
+              <a href="https://www.amcharts.com/docs/v4/" target="_blank" rel="noreferrer">
+                Charts are provided by amCharts 4
+              </a>
+            </p>
+          </Container>
+        </div>
+      )}
     </div>
   );
 }
