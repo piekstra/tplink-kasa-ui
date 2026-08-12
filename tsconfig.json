@@ -1,41 +1,9 @@
 {
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
-    "baseUrl": ".",
-    "allowJs": true,
-    "checkJs": false,
-    "downlevelIteration": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
-    "jsx": "react-jsx",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2019",
-    "lib": [
-      "esnext",
-      "DOM"
-    ],
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
-  },
-  "exclude": [
-    "node_modules"
-  ],
-  "compileOnSave": true,
-  "include": [
-    "src"
-  ]
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }

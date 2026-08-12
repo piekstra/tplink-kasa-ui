@@ -10,11 +10,12 @@ The backend API server for this project is maintained here: https://github.com/p
 
 ## Prerequisites
 
-* [Docker Compose](https://docs.docker.com/compose/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Running the Project
 
 To run, simply run the following command:
+
 ```
 docker-compose up -d --build
 ```
