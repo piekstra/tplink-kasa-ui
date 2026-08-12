@@ -141,11 +141,14 @@ export const tplinkProvider: DeviceProvider = {
     const response = await http.get<{ data: TplinkPowerCurrent[] }>('/power/devices/current', {
       named: nameFilter,
     });
-    return response.data.map((reading) => ({
-      deviceId: deviceKey(reading.device_id, reading.child_id),
-      name: reading.name,
-      watts: reading.data === null ? null : reading.data.power_mw / 1000,
-    }));
+    return response.data.map((reading) => {
+      const watts = reading.data === null ? null : reading.data.power_mw / 1000;
+      return {
+        deviceId: deviceKey(reading.device_id, reading.child_id),
+        name: reading.name,
+        watts: watts !== null && Number.isFinite(watts) ? watts : null,
+      };
+    });
   },
 
   async getDailyEnergy(nameFilter?: string): Promise<DeviceEnergy[]> {

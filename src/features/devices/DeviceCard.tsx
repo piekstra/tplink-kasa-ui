@@ -35,7 +35,7 @@ export function DeviceCard({ device, watts }: { device: Device; watts?: number |
 
   return (
     <Card
-      className={cn('transition-opacity', !device.isOnline && 'opacity-60')}
+      className={cn('py-0 transition-opacity', !device.isOnline && 'opacity-60')}
       data-testid={`device-${device.id}`}
     >
       <CardContent className="flex items-center gap-3 p-4">

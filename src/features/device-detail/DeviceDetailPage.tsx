@@ -5,6 +5,7 @@ import { useDevice } from '@/api/queries';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DeviceEnergyTabs } from './DeviceEnergyTabs';
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
@@ -65,6 +66,8 @@ export function DeviceDetailPage() {
             ))}
         </CardContent>
       </Card>
+
+      {detail.capabilities.emeter && <DeviceEnergyTabs deviceId={detail.id} name={detail.name} />}
     </div>
   );
 }
