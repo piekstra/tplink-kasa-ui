@@ -1,8 +1,6 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { BarChart3, LayoutGrid, LogOut, Moon, Plug, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useCallback, useEffect } from 'react';
-import { Navigate, NavLink, Outlet, useNavigate } from 'react-router';
+import { NavLink, Outlet, useOutletContext } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,9 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { AUTH_EXPIRED_EVENT } from '@/api/http';
-import { isAuthenticated, logout } from '@/features/auth/auth';
 import { cn } from '@/lib/utils';
+
+interface SessionContext {
+  signOut: () => void;
+}
 
 const NAV_ITEMS = [
   { to: '/', label: 'Devices', icon: LayoutGrid, end: true },
@@ -36,24 +36,9 @@ function ThemeToggle() {
 }
 
 export function AppShell() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const signOut = useCallback(() => {
-    logout();
-    queryClient.clear();
-    void navigate('/login', { replace: true });
-  }, [navigate, queryClient]);
-
-  useEffect(() => {
-    // A 401 anywhere (expired token) tears down the session and returns to login
-    window.addEventListener(AUTH_EXPIRED_EVENT, signOut);
-    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, signOut);
-  }, [signOut]);
-
-  if (!isAuthenticated()) {
-    return <Navigate to="/login" replace />;
-  }
+  // The session lifecycle (auth gate + sign-out) is owned by RequireAuth,
+  // which supplies signOut through the outlet context. AppShell is layout only.
+  const { signOut } = useOutletContext<SessionContext>();
 
   return (
     <div className="flex min-h-dvh flex-col">

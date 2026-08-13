@@ -6,9 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { buildColorMap } from './charts/common';
-import { CurrentPowerChart, usePowerHistory } from './charts/CurrentPowerChart';
+import { CurrentPowerChart } from './charts/CurrentPowerChart';
 import { EnergyBarChart } from './charts/EnergyBarChart';
 import { chartView, powerView as buildPowerView, toEnergyRows } from './transform';
+import { usePowerHistory } from './usePowerHistory';
 
 const SERIES_CAP = 4;
 

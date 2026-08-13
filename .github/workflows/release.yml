@@ -8,7 +8,24 @@ permissions:
   contents: read
 
 jobs:
+  # Gate the publish on the same checks as CI so a tag on a broken commit
+  # can't publish a green image.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+
   publish:
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       contents: read

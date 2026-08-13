@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -10,33 +9,10 @@ import {
   YAxis,
 } from 'recharts';
 
-import type { PowerReading } from '@/api/types';
 import type { PowerRow } from '../transform';
 import { AXIS_TICK, ChartTooltip, colorFor, DataTable, GRID_STROKE } from './common';
 
 const timeFormat = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' });
-
-const MAX_POINTS = 360; // one hour at the 10s polling cadence
-
-/** Accumulate a rolling window of wattage samples from the polled readings. */
-export function usePowerHistory(readings: PowerReading[] | undefined) {
-  const [rows, setRows] = useState<PowerRow[]>([]);
-  const lastReadings = useRef<PowerReading[] | undefined>(undefined);
-
-  useEffect(() => {
-    if (!readings || readings === lastReadings.current) return;
-    lastReadings.current = readings;
-    const row: PowerRow = { time: Date.now() };
-    for (const reading of readings) {
-      if (reading.watts !== null && Number.isFinite(reading.watts)) {
-        row[reading.name] = reading.watts;
-      }
-    }
-    setRows((previous) => [...previous.slice(-(MAX_POINTS - 1)), row]);
-  }, [readings]);
-
-  return rows;
-}
 
 export function CurrentPowerChart({
   rows,

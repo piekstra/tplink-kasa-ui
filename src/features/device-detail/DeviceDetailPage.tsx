@@ -16,6 +16,14 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+function formatUptime(seconds: number): string {
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  if (days > 0) return `${days}d ${hours}h`;
+  const minutes = Math.floor((seconds % 3600) / 60);
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+}
+
 export function DeviceDetailPage() {
   const { deviceId } = useParams<'deviceId'>();
   const device = useDevice(deviceId!);
@@ -33,8 +41,16 @@ export function DeviceDetailPage() {
   }
 
   const detail = device.data;
-  const interesting = ['sw_ver', 'hw_ver', 'mac', 'on_time', 'led_off', 'rssi'];
-  const raw = detail.raw ?? {};
+
+  const info: [string, string | null][] = [
+    ['State', detail.isOn === null ? '—' : detail.isOn ? 'On' : 'Off'],
+    ['Kind', detail.kind],
+    ['Firmware', detail.firmwareVersion],
+    ['Hardware', detail.hardwareVersion],
+    ['MAC', detail.mac],
+    ['Uptime', detail.uptimeSeconds === null ? null : formatUptime(detail.uptimeSeconds)],
+    ['Wi-Fi signal', detail.rssi === null ? null : `${detail.rssi} dBm`],
+  ];
 
   return (
     <div className="grid gap-4">
@@ -60,13 +76,10 @@ export function DeviceDetailPage() {
           <CardTitle className="text-base">Device info</CardTitle>
         </CardHeader>
         <CardContent>
-          <InfoRow label="State" value={detail.isOn === null ? '—' : detail.isOn ? 'On' : 'Off'} />
-          <InfoRow label="Kind" value={detail.kind} />
-          {detail.rssi !== null && <InfoRow label="Wi-Fi signal" value={`${detail.rssi} dBm`} />}
-          {interesting
-            .filter((key) => raw[key] !== undefined && raw[key] !== null)
-            .map((key) => (
-              <InfoRow key={key} label={key} value={String(raw[key])} />
+          {info
+            .filter(([, value]) => value !== null)
+            .map(([label, value]) => (
+              <InfoRow key={label} label={label} value={value as string} />
             ))}
         </CardContent>
       </Card>

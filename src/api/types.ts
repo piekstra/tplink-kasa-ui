@@ -27,6 +27,11 @@ export interface Device {
 }
 
 export interface DeviceDetail extends Device {
+  firmwareVersion: string | null;
+  hardwareVersion: string | null;
+  mac: string | null;
+  uptimeSeconds: number | null;
+  /** Raw vendor sys_info — for a debug/advanced view only, never for neutral UI. */
   raw: Record<string, unknown> | null;
   network: Record<string, unknown> | null;
 }

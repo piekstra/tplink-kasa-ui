@@ -45,6 +45,14 @@ interface TplinkEnergyUsage {
 
 // --- Mapping ---
 
+function asString(value: unknown): string | null {
+  return typeof value === 'string' ? value : null;
+}
+
+function asNumber(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
 /** `device_id` or `device_id:child_id`, URL-safe key shared with power data. */
 function deviceKey(deviceId: string, childId?: string | null): string {
   return childId ? `${deviceId}:${childId}` : deviceId;
@@ -122,8 +130,15 @@ export const tplinkProvider: DeviceProvider = {
       `/devices/${encodeURIComponent(deviceId)}`,
       { child_id: childId },
     );
+    const sys = response.data.sys_info ?? {};
     return {
       ...toDevice(response.data),
+      // Map the TP-Link sys_info shape to neutral fields here, so no component
+      // reads a vendor payload key. raw stays available for an advanced view.
+      firmwareVersion: asString(sys.sw_ver),
+      hardwareVersion: asString(sys.hw_ver),
+      mac: asString(sys.mac),
+      uptimeSeconds: asNumber(sys.on_time),
       raw: response.data.sys_info,
       network: response.data.net_info,
     };
