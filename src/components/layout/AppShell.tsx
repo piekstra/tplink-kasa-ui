@@ -1,6 +1,6 @@
 import { BarChart3, LayoutGrid, LogOut, Moon, Plug, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { NavLink, Outlet, useOutletContext } from 'react-router';
+import { NavLink, Outlet } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -9,11 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useSession } from '@/features/auth/RequireAuth';
 import { cn } from '@/lib/utils';
-
-interface SessionContext {
-  signOut: () => void;
-}
 
 const NAV_ITEMS = [
   { to: '/', label: 'Devices', icon: LayoutGrid, end: true },
@@ -38,7 +35,7 @@ function ThemeToggle() {
 export function AppShell() {
   // The session lifecycle (auth gate + sign-out) is owned by RequireAuth,
   // which supplies signOut through the outlet context. AppShell is layout only.
-  const { signOut } = useOutletContext<SessionContext>();
+  const { signOut } = useSession();
 
   return (
     <div className="flex min-h-dvh flex-col">

@@ -16,6 +16,11 @@ export class ApiError extends Error {
   }
 }
 
+// Accepted risk: the bearer token lives in localStorage, so any script on the
+// origin could read it under XSS. For this self-hosted, single-origin dashboard
+// that's an accepted trade for stateless auth that survives reload; an httpOnly
+// cookie would require the service to abandon the stateless bearer model. Revisit
+// if this is ever exposed to untrusted origins or gains third-party scripts.
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_STORAGE_KEY);
 }
