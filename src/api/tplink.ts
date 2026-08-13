@@ -103,6 +103,11 @@ function toEnergy(usage: TplinkEnergyUsage): DeviceEnergy {
   };
 }
 
+/**
+ * The TP-Link implementation of DeviceProvider. It is selected at the
+ * composition root (see src/api/provider.tsx / main.tsx), not bound here — so a
+ * future home-ui adds providers without editing this leaf module.
+ */
 export const tplinkProvider: DeviceProvider = {
   vendor: 'tplink',
 
@@ -165,6 +170,3 @@ export const tplinkProvider: DeviceProvider = {
     return response.data.map(toEnergy);
   },
 };
-
-/** The active provider. home-ui replaces this with a registry across vendors. */
-export const provider: DeviceProvider = tplinkProvider;

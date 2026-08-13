@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { BarChart3, LayoutGrid, LogOut, Moon, Plug, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Navigate, NavLink, Outlet, useNavigate } from 'react-router';
 
 import { Button } from '@/components/ui/button';
@@ -39,25 +39,21 @@ export function AppShell() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const onExpired = () => {
-      logout();
-      queryClient.clear();
-      void navigate('/login', { replace: true });
-    };
-    window.addEventListener(AUTH_EXPIRED_EVENT, onExpired);
-    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, onExpired);
+  const signOut = useCallback(() => {
+    logout();
+    queryClient.clear();
+    void navigate('/login', { replace: true });
   }, [navigate, queryClient]);
+
+  useEffect(() => {
+    // A 401 anywhere (expired token) tears down the session and returns to login
+    window.addEventListener(AUTH_EXPIRED_EVENT, signOut);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, signOut);
+  }, [signOut]);
 
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
-
-  const handleLogout = () => {
-    logout();
-    queryClient.clear();
-    void navigate('/login', { replace: true });
-  };
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -70,6 +66,7 @@ export function AppShell() {
               <NavLink key={to} to={to} end={end}>
                 {({ isActive }) => (
                   <span
+                    aria-current={isActive ? 'page' : undefined}
                     className={cn(
                       'flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                       isActive
@@ -93,7 +90,7 @@ export function AppShell() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem onClick={signOut}>
                   <LogOut className="size-4" /> Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -113,6 +110,7 @@ export function AppShell() {
             <NavLink key={to} to={to} end={end}>
               {({ isActive }) => (
                 <span
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
                     'flex flex-col items-center gap-1 py-2 text-xs font-medium',
                     isActive ? 'text-foreground' : 'text-muted-foreground',

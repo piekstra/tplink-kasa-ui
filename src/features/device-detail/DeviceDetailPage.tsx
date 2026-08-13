@@ -39,8 +39,12 @@ export function DeviceDetailPage() {
   return (
     <div className="grid gap-4">
       <div className="flex items-center gap-3">
-        <Link to="/" className="text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="size-5" />
+        <Link
+          to="/"
+          aria-label="Back to devices"
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="size-5" aria-hidden />
         </Link>
         <h1 className="text-xl font-semibold">{detail.name}</h1>
         <Badge variant="secondary">{detail.model}</Badge>

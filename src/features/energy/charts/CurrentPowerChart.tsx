@@ -11,14 +11,10 @@ import {
 } from 'recharts';
 
 import type { PowerReading } from '@/api/types';
-import { AXIS_TICK, ChartTooltip, colorFor, GRID_STROKE } from './common';
+import type { PowerRow } from '../transform';
+import { AXIS_TICK, ChartTooltip, colorFor, DataTable, GRID_STROKE } from './common';
 
 const timeFormat = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' });
-
-interface PowerRow {
-  time: number;
-  [series: string]: number;
-}
 
 const MAX_POINTS = 360; // one hour at the 10s polling cadence
 
@@ -60,47 +56,57 @@ export function CurrentPowerChart({
   }
 
   return (
-    <div className="h-64">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={rows} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
-          <CartesianGrid vertical={false} stroke={GRID_STROKE} />
-          <XAxis
-            dataKey="time"
-            type="number"
-            scale="time"
-            domain={['dataMin', 'dataMax']}
-            tickFormatter={(t) => timeFormat.format(new Date(t))}
-            tick={AXIS_TICK}
-            tickLine={false}
-            axisLine={{ stroke: GRID_STROKE }}
-          />
-          <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} width={48} />
-          <Tooltip
-            content={
-              <ChartTooltip unit="W" labelText={(l) => timeFormat.format(new Date(Number(l)))} />
-            }
-          />
-          {series.length > 1 && (
-            <Legend
-              iconType="square"
-              iconSize={8}
-              formatter={(value) => <span className="text-xs text-muted-foreground">{value}</span>}
+    <div>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={rows} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+            <CartesianGrid vertical={false} stroke={GRID_STROKE} />
+            <XAxis
+              dataKey="time"
+              type="number"
+              scale="time"
+              domain={['dataMin', 'dataMax']}
+              tickFormatter={(t) => timeFormat.format(new Date(t))}
+              tick={AXIS_TICK}
+              tickLine={false}
+              axisLine={{ stroke: GRID_STROKE }}
             />
-          )}
-          {series.map((name) => (
-            <Line
-              key={name}
-              dataKey={name}
-              stroke={colorFor(colors, name)}
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              connectNulls
-              isAnimationActive={false}
+            <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} width={48} />
+            <Tooltip
+              content={
+                <ChartTooltip unit="W" labelText={(l) => timeFormat.format(new Date(Number(l)))} />
+              }
             />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+            {series.length > 1 && (
+              <Legend
+                iconType="square"
+                iconSize={8}
+                formatter={(value) => (
+                  <span className="text-xs text-muted-foreground">{value}</span>
+                )}
+              />
+            )}
+            {series.map((name) => (
+              <Line
+                key={name}
+                dataKey={name}
+                stroke={colorFor(colors, name)}
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4 }}
+                connectNulls
+                isAnimationActive={false}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <DataTable
+        rows={rows}
+        series={series}
+        labelFor={(time) => timeFormat.format(new Date(time))}
+        unit="W"
+      />
     </div>
   );
 }

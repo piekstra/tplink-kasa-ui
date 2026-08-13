@@ -1,7 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
 import type { DeviceEnergy } from '@/api/types';
-import { capSeries, capSeriesTo, filterSeries, OTHER_SERIES, toEnergyRows } from './transform';
+import type { PowerRow } from './transform';
+import {
+  byRanking,
+  capSeries,
+  capSeriesTo,
+  chartView,
+  filterSeries,
+  OTHER_SERIES,
+  powerView,
+  toEnergyRows,
+} from './transform';
 
 const NOW = new Date(2026, 7, 12); // Aug 12 2026
 
@@ -174,5 +184,70 @@ describe('capSeriesTo', () => {
 
   it('is a no-op when every series is kept', () => {
     expect(capSeriesTo(base, ['A', 'B', 'C'])).toBe(base);
+  });
+});
+
+describe('byRanking', () => {
+  const cmp = byRanking(['Big', 'Mid', 'Small']);
+
+  it('orders by the ranking, unranked last, then alphabetically', () => {
+    expect(['Small', 'Big', 'Zeta', 'Alpha'].sort(cmp)).toEqual(['Big', 'Small', 'Alpha', 'Zeta']);
+  });
+});
+
+describe('chartView', () => {
+  const data = toEnergyRows(
+    [
+      device('A', [[new Date(2026, 7, 10), 5000]]),
+      device('B', [[new Date(2026, 7, 10), 4000]]),
+      device('C', [[new Date(2026, 7, 10), 3000]]),
+      device('D', [[new Date(2026, 7, 10), 2000]]),
+      device('E', [[new Date(2026, 7, 10), 1000]]),
+    ],
+    'day',
+    NOW,
+  );
+  const top = data.series.slice(0, 4);
+
+  it('folds the long tail into Other when over the cap', () => {
+    const view = chartView(data, '', top, 4);
+    expect(view.series).toEqual(['A', 'B', 'C', 'D', OTHER_SERIES]);
+    expect(view.rows[0][OTHER_SERIES]).toBe(1); // E only
+  });
+
+  it('shows matches as themselves once a filter narrows under the cap', () => {
+    const view = chartView(data, 'a', top, 4);
+    expect(view.series).toEqual(['A']);
+  });
+});
+
+describe('powerView', () => {
+  const ranking = ['A', 'B', 'C', 'D', 'E'];
+  const rows = [
+    { time: 1, A: 10, B: 20, C: 30, D: 40, E: 50 },
+    { time: 2, A: 11, B: 21, C: 31, D: 41, E: 51 },
+  ];
+
+  it('returns names in ranking order when at or under the cap', () => {
+    const view = powerView(rows, ['C', 'A', 'B'], ranking, 4);
+    expect(view.series).toEqual(['A', 'B', 'C']);
+    expect(view.rows).toBe(rows); // untouched
+  });
+
+  it('folds beyond the cap and sums Other only where present', () => {
+    const view = powerView(rows, ['A', 'B', 'C', 'D', 'E'], ranking, 4);
+    expect(view.series).toEqual(['A', 'B', 'C', 'D', OTHER_SERIES]);
+    expect(view.rows[0][OTHER_SERIES]).toBe(50); // E
+    expect(view.rows[0].A).toBe(10);
+  });
+
+  it('omits Other in a row that has no folded reading', () => {
+    const sparse: PowerRow[] = [
+      { time: 1, A: 10, B: 20, C: 30, D: 40 }, // no E this tick
+      { time: 2, A: 11, B: 21, C: 31, D: 41, E: 51 },
+    ];
+    const view = powerView(sparse, ['A', 'B', 'C', 'D', 'E'], ranking, 4);
+    expect(view.rows[0][OTHER_SERIES]).toBeUndefined();
+    expect(view.rows[1][OTHER_SERIES]).toBe(51);
   });
 });

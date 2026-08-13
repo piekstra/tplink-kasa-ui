@@ -35,6 +35,7 @@ export function DevicesPage() {
         <div className="relative flex-1 sm:max-w-xs">
           <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            aria-label="Filter devices"
             placeholder="Filter devices…"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}

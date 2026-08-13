@@ -78,6 +78,7 @@ export function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pr-10"
+                  aria-describedby={error ? 'login-error' : undefined}
                 />
                 <button
                   type="button"
@@ -101,7 +102,11 @@ export function LoginPage() {
                 />
               </div>
             )}
-            {error && <p className="text-sm text-destructive">{error}</p>}
+            {error && (
+              <p id="login-error" role="alert" className="text-sm text-destructive">
+                {error}
+              </p>
+            )}
             <Button type="submit" disabled={submitting}>
               {submitting ? 'Signing in…' : 'Sign in'}
             </Button>

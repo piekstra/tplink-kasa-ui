@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { provider } from './tplink';
+import { useDeviceProvider } from './provider';
 import type { Device, PowerAction } from './types';
 
 const REFETCH = {
@@ -9,7 +9,14 @@ const REFETCH = {
   energy: 5 * 60_000,
 } as const;
 
+/** Optimistic next state for a toggle, preserving the unknown (null) tri-state. */
+function nextIsOn(current: boolean | null, action: PowerAction): boolean | null {
+  if (action === 'toggle') return current === null ? null : !current;
+  return action === 'on';
+}
+
 export function useDevices() {
+  const provider = useDeviceProvider();
   return useQuery({
     queryKey: ['devices'],
     queryFn: () => provider.listDevices(),
@@ -19,6 +26,7 @@ export function useDevices() {
 }
 
 export function useDevice(id: string) {
+  const provider = useDeviceProvider();
   return useQuery({
     queryKey: ['devices', id],
     queryFn: () => provider.getDevice(id),
@@ -26,6 +34,7 @@ export function useDevice(id: string) {
 }
 
 export function usePowerAction() {
+  const provider = useDeviceProvider();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, action }: { id: string; action: PowerAction }) =>
@@ -35,9 +44,7 @@ export function usePowerAction() {
       const previous = queryClient.getQueryData<Device[]>(['devices']);
       queryClient.setQueryData<Device[]>(['devices'], (devices) =>
         devices?.map((device) =>
-          device.id === id
-            ? { ...device, isOn: action === 'toggle' ? !device.isOn : action === 'on' }
-            : device,
+          device.id === id ? { ...device, isOn: nextIsOn(device.isOn, action) } : device,
         ),
       );
       return { previous };
@@ -52,6 +59,7 @@ export function usePowerAction() {
 }
 
 export function useCurrentPower(nameFilter?: string) {
+  const provider = useDeviceProvider();
   return useQuery({
     queryKey: ['power', 'current', nameFilter ?? ''],
     queryFn: () => provider.getCurrentPower(nameFilter),
@@ -61,6 +69,7 @@ export function useCurrentPower(nameFilter?: string) {
 }
 
 export function useDailyEnergy(nameFilter?: string) {
+  const provider = useDeviceProvider();
   return useQuery({
     queryKey: ['power', 'day', nameFilter ?? ''],
     queryFn: () => provider.getDailyEnergy(nameFilter),
@@ -70,6 +79,7 @@ export function useDailyEnergy(nameFilter?: string) {
 }
 
 export function useMonthlyEnergy(nameFilter?: string) {
+  const provider = useDeviceProvider();
   return useQuery({
     queryKey: ['power', 'month', nameFilter ?? ''],
     queryFn: () => provider.getMonthlyEnergy(nameFilter),
