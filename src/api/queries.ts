@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useDeviceProvider } from './provider';
+import { useDeviceProvider } from './services';
 import type { Device, PowerAction } from './types';
 
 const REFETCH = {

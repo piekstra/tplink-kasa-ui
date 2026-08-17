@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router';
 
 import { ApiError } from '@/api/http';
+import { useHttp } from '@/api/services';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,7 @@ import { isAuthenticated, login } from './auth';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const http = useHttp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mfaCode, setMfaCode] = useState('');
@@ -28,7 +30,7 @@ export function LoginPage() {
     setError(null);
     setSubmitting(true);
     try {
-      await login(email, password, mfaRequired && mfaCode ? mfaCode : undefined);
+      await login(http, email, password, mfaRequired && mfaCode ? mfaCode : undefined);
       void navigate('/', { replace: true });
     } catch (err) {
       if (err instanceof ApiError && err.payload?.mfa_required === true) {

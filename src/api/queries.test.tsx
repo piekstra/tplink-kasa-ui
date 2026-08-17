@@ -3,9 +3,16 @@ import { renderHook, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { DeviceProviderProvider } from './provider';
+import type { HttpClient } from './http';
+import { ServicesProvider } from './services';
 import { usePowerAction } from './queries';
 import type { Device, DeviceProvider } from './types';
+
+const noopHttp = {
+  get: async () => ({}),
+  post: async () => ({}),
+  setOnUnauthorized: () => {},
+} as unknown as HttpClient;
 
 function makeDevice(over: Partial<Device> = {}): Device {
   return {
@@ -34,7 +41,9 @@ function setup(overrides: Partial<DeviceProvider>, seed: Device[]) {
   } as DeviceProvider;
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      <DeviceProviderProvider provider={provider}>{children}</DeviceProviderProvider>
+      <ServicesProvider services={{ http: noopHttp, deviceProvider: provider }}>
+        {children}
+      </ServicesProvider>
     </QueryClientProvider>
   );
   return { queryClient, wrapper };

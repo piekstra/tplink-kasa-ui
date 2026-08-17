@@ -4,23 +4,33 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 
-import { DeviceProviderProvider } from '@/api/provider';
+import { createHttpClient } from '@/api/http';
 import { queryClient } from '@/api/queryClient';
-import { tplinkProvider } from '@/api/tplink';
+import { ServicesProvider, type Services } from '@/api/services';
+import { createTplinkProvider } from '@/api/tplink';
+import { localStorageTokenStore } from '@/api/tokenStore';
 import { Toaster } from '@/components/ui/sonner';
 import { router } from '@/routes';
 
 import './index.css';
 
+// The composition root: build the transport and the active vendor provider once,
+// wire the token store in, and inject both through context. RequireAuth registers
+// the 401 handler on the client; nothing else touches the transport directly.
+const http = createHttpClient({ getToken: localStorageTokenStore.get });
+const services: Services = {
+  http,
+  deviceProvider: createTplinkProvider(http),
+};
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <QueryClientProvider client={queryClient}>
-        {/* The app's one vendor-provider choice, made at the composition root */}
-        <DeviceProviderProvider provider={tplinkProvider}>
+        <ServicesProvider services={services}>
           <RouterProvider router={router} />
           <Toaster position="top-center" />
-        </DeviceProviderProvider>
+        </ServicesProvider>
       </QueryClientProvider>
     </ThemeProvider>
   </StrictMode>,

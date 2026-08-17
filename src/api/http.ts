@@ -1,10 +1,3 @@
-const ROOT_PATH = '/api/v1';
-
-const TOKEN_STORAGE_KEY = 'access_token';
-
-/** Fired on any 401 so the app can route back to login. */
-export const AUTH_EXPIRED_EVENT = 'auth:expired';
-
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -14,23 +7,6 @@ export class ApiError extends Error {
     super(message);
     this.name = 'ApiError';
   }
-}
-
-// Accepted risk: the bearer token lives in localStorage, so any script on the
-// origin could read it under XSS. For this self-hosted, single-origin dashboard
-// that's an accepted trade for stateless auth that survives reload; an httpOnly
-// cookie would require the service to abandon the stateless bearer model. Revisit
-// if this is ever exposed to untrusted origins or gains third-party scripts.
-export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_STORAGE_KEY);
-}
-
-export function setToken(token: string): void {
-  localStorage.setItem(TOKEN_STORAGE_KEY, token);
-}
-
-export function clearToken(): void {
-  localStorage.removeItem(TOKEN_STORAGE_KEY);
 }
 
 type Params = Record<string, string | undefined>;
@@ -43,49 +19,71 @@ interface RequestOptions {
   auth?: boolean;
 }
 
-async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { method = 'GET', params, json, form, auth = true } = options;
-
-  const search = new URLSearchParams();
-  for (const [key, value] of Object.entries(params ?? {})) {
-    if (value !== undefined && value !== '') search.set(key, value);
-  }
-  const query = search.size > 0 ? `?${search.toString()}` : '';
-
-  const headers: Record<string, string> = { Accept: 'application/json' };
-  const token = getToken();
-  if (auth && token) headers.Authorization = `Bearer ${token}`;
-
-  let body: string | URLSearchParams | undefined;
-  if (json !== undefined) {
-    headers['Content-Type'] = 'application/json';
-    body = JSON.stringify(json);
-  } else if (form !== undefined) {
-    body = new URLSearchParams(form);
-  }
-
-  const response = await fetch(`${ROOT_PATH}${path}${query}`, { method, headers, body });
-
-  if (!response.ok) {
-    let detail = response.statusText;
-    let payload: Record<string, unknown> | undefined;
-    try {
-      payload = await response.json();
-      if (typeof payload?.detail === 'string') detail = payload.detail;
-    } catch {
-      // non-JSON error body; keep the status text
-    }
-    if (response.status === 401 && auth) {
-      window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
-    }
-    throw new ApiError(response.status, detail, payload);
-  }
-
-  return response.json() as Promise<T>;
+export interface HttpClient {
+  get<T>(path: string, params?: Params): Promise<T>;
+  post<T>(path: string, options?: Omit<RequestOptions, 'method'>): Promise<T>;
+  /** Register (or clear) the callback fired when an authed request gets a 401. */
+  setOnUnauthorized(handler: (() => void) | null): void;
 }
 
-export const http = {
-  get: <T>(path: string, params?: Params) => request<T>(path, { params }),
-  post: <T>(path: string, options: Omit<RequestOptions, 'method'> = {}) =>
-    request<T>(path, { ...options, method: 'POST' }),
-};
+export interface HttpClientOptions {
+  /** Supplies the bearer token per request; injected so the transport holds no ambient state. */
+  getToken: () => string | null;
+  rootPath?: string;
+}
+
+export function createHttpClient({
+  getToken,
+  rootPath = '/api/v1',
+}: HttpClientOptions): HttpClient {
+  let onUnauthorized: (() => void) | null = null;
+
+  async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
+    const { method = 'GET', params, json, form, auth = true } = options;
+
+    const search = new URLSearchParams();
+    for (const [key, value] of Object.entries(params ?? {})) {
+      if (value !== undefined && value !== '') search.set(key, value);
+    }
+    const query = search.size > 0 ? `?${search.toString()}` : '';
+
+    const headers: Record<string, string> = { Accept: 'application/json' };
+    const token = getToken();
+    if (auth && token) headers.Authorization = `Bearer ${token}`;
+
+    let body: string | URLSearchParams | undefined;
+    if (json !== undefined) {
+      headers['Content-Type'] = 'application/json';
+      body = JSON.stringify(json);
+    } else if (form !== undefined) {
+      body = new URLSearchParams(form);
+    }
+
+    const response = await fetch(`${rootPath}${path}${query}`, { method, headers, body });
+
+    if (!response.ok) {
+      let detail = response.statusText;
+      let payload: Record<string, unknown> | undefined;
+      try {
+        payload = await response.json();
+        if (typeof payload?.detail === 'string') detail = payload.detail;
+      } catch {
+        // non-JSON error body; keep the status text
+      }
+      if (response.status === 401 && auth) {
+        onUnauthorized?.();
+      }
+      throw new ApiError(response.status, detail, payload);
+    }
+
+    return response.json() as Promise<T>;
+  }
+
+  return {
+    get: (path, params) => request(path, { params }),
+    post: (path, options = {}) => request(path, { ...options, method: 'POST' }),
+    setOnUnauthorized: (handler) => {
+      onUnauthorized = handler;
+    },
+  };
+}

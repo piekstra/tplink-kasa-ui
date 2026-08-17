@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
 import { Navigate, Outlet, useNavigate, useOutletContext } from 'react-router';
 
-import { AUTH_EXPIRED_EVENT } from '@/api/http';
+import { useHttp } from '@/api/services';
 import { isAuthenticated, logout } from './auth';
 
 export interface SessionContext {
@@ -26,6 +26,7 @@ export function useSession(): SessionContext {
 export function RequireAuth() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const http = useHttp();
 
   const signOut = useCallback(() => {
     logout();
@@ -34,10 +35,12 @@ export function RequireAuth() {
   }, [navigate, queryClient]);
 
   useEffect(() => {
-    // A 401 anywhere (expired token) tears down the session and returns to login
-    window.addEventListener(AUTH_EXPIRED_EVENT, signOut);
-    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, signOut);
-  }, [signOut]);
+    // A 401 on any authed request (expired token) tears down the session and
+    // returns to login. Registering the handler here keeps the transport free
+    // of router/auth knowledge — it just calls back on 401.
+    http.setOnUnauthorized(signOut);
+    return () => http.setOnUnauthorized(null);
+  }, [http, signOut]);
 
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
