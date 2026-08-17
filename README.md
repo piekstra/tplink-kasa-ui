@@ -1,54 +1,62 @@
 # tplink-kasa-ui
 
-A simple frontend to observe and interact with Kasa devices. At this time, only viewing of electricity usage data for emeter-enabled Kasa devices is supported.
+A modern, mobile-first web app to **see, monitor, and control** TP-Link Kasa smart
+devices — device toggles, live wattage, and daily/monthly energy charts. Installable
+as a PWA so it works like an app on your phone.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Built with Vite, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, TanStack Query,
+and Recharts.
 
-## API
+## Backend
 
-The backend API server for this project is maintained here: https://github.com/piekstra/tplinkcloud-service
+The API is [tplinkcloud-service](https://github.com/piekstra/tplinkcloud-service),
+which wraps [tplink-cloud-api](https://github.com/piekstra/tplink-cloud-api). Auth is
+stateless pass-through: your TP-Link cloud session token (wrapped in an opaque service
+token) is the bearer token; nothing is stored server-side.
 
-## Prerequisites
+## Running the stack
 
-* [Docker Compose](https://docs.docker.com/compose/install/)
-
-## Running the Project
-
-To run, simply run the following command:
+```sh
+docker compose up -d --build
 ```
-docker-compose up -d --build
+
+Then open http://localhost and sign in with your TP-Link (Kasa) account.
+
+## Development
+
+```sh
+nvm use            # Node 22
+npm install
+npm run dev        # http://localhost:5173, proxies /api to :8000
 ```
 
-You should now be able to view the site at [http://localhost](http://localhost)
+Run the API locally alongside it (from the tplinkcloud-service repo):
 
-## Available Scripts for Development Purposes
+```sh
+uv run uvicorn app.main:app --port 8000
+```
 
-In the project directory, you can run:
+Other scripts: `npm test` (vitest), `npm run lint`, `npm run format`, `npm run build`.
 
-### `yarn start`
+## Architecture notes (home-ui seams)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This app is deliberately structured so a future multi-vendor **home-ui**
+(govee, roomba, samsung, …) can grow out of it:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- `src/api/types.ts` — vendor-neutral `Device` / `DeviceProvider` interfaces.
+  Components only import these.
+- `src/api/tplink.ts` — the sole `DeviceProvider` implementation. home-ui adds a
+  provider registry keyed by `vendor` and aggregates `listDevices()` across
+  providers; components don't change.
+- `src/features/auth/auth.ts` — the single-token auth module; the only file that
+  changes when a future home-api owns one login → N vendor tokens.
+- The backend's REST shape (`/devices`, `POST /devices/{id}/power`,
+  `/power/devices/*`) is the vendor-service convention documented in the
+  tplinkcloud-service README.
 
-### `yarn test`
+## PWA / phone use
 
-Launches the test runner in the interactive watch mode.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-## Linting
-
-_For automatic linting_
-
-### `npm run lint:fix`
-
-Alternatively, commit from the UI directory
+The app registers a service worker (app shell only — device data is never cached)
+and is installable. Note: service workers require HTTPS (or localhost), so for
+LAN access from a phone put the compose stack behind Tailscale Serve or a local
+TLS proxy to get the install prompt.

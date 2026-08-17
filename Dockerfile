@@ -1,20 +1,13 @@
-# Stage 1
-# pull official base image
-FROM node:15.12.0-alpine as build-step
+FROM node:22-alpine AS build
 
-# set working directory
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# install app dependencies
-COPY package.json yarn.lock ./
-RUN yarn install
+FROM nginx:stable-alpine
 
-# add app and build it for production
-COPY . ./
-RUN yarn build
-
-# Stage 2 - Web server for the prod build
-FROM nginx:1.19.8-alpine
-
-COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-step /app/build /usr/share/nginx/html
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80

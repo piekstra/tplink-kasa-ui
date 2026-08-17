@@ -1,9 +1,8 @@
-/node_modules
-
-/build
-
+node_modules
+dist
+dev-dist
+coverage
 .git
-
+.github
 *.md
-
-.gitignore
+.twapp-*
